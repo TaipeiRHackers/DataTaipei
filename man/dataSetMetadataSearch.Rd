@@ -2,12 +2,19 @@
 % Please edit documentation in R/dataSetMetadataSearch.R
 \name{dataSetMetadataSearch}
 \alias{dataSetMetadataSearch}
-\title{Dataset Metadata Search}
+\title{Dataset Metadata Search Test
+
+Description of this function}
 \usage{
 dataSetMetadataSearch(keyword = NULL, filter = character(0), limit = 100L,
   offset = 0L)
 }
+\arguments{
+\item{keyword}{(character vector). Filter the result by keyword.}
+}
 \description{
-Dataset Metadata Search
+Dataset Metadata Search Test
+
+Description of this function
 }
 
