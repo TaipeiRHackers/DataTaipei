@@ -3,7 +3,7 @@ Type: Package
 Title: R Client for http://data.taipei
 Version: 0.1
 Date: 2015-05-09
-Author: Wush Wu and John Chen and Will Chang
+Author: Wush Wu, John Chen and Will Chang
 Maintainer: Wush Wu <wush978@gmail.com>
 Description: R Client for http://data.taipei
 License: GPL (>= 2)
