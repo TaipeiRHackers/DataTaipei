@@ -3,14 +3,18 @@ get_url <- function() {
   "http://data.taipei"
 }
 
-query_server <- function(url) {
-  response <- httr::GET(url)
-  httr::stop_for_status(response)
-  result <- httr::content(response)
-  # make the result be a data.frame
+dataTaipei_GET <- function(path, ...) {
+  req <- httr::GET("http://data.taipei/opendata", path = path, auth, ...)
+  dataTaipei_check(req)
 }
 
-#'@export
-print.DataTaipeiResult <- function(x, ...) {
-  # implement the print function
+dataTaipei_check <- function(req) {
+  httr::stop_for_status(req)
+  dataTaipei_parse(req)
+}
+
+dataTaipei_parse <- function(req) {
+  text <- content(req, as = "text")
+  if (identical(text, "")) stop("Not output to parse", call. = FALSE)
+  jsonlite::fromJSON(text, simplifyVector = FALSE)
 }
