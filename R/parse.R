@@ -1,0 +1,7 @@
+searchParse <- function(...) {
+  
+}
+
+resourceParse <- function(...) {
+  
+}
