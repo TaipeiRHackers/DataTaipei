@@ -1,6 +1,6 @@
 #'@export
-resourceMetadataSearch <- function(...) {
-  
-  # 還沒測出來 resourceMetadataSearch 的用途
-  
+resourceMetadataSearch <- function(q=NULL,limit=1000,offset=0) {
+  response <- dataTaipeiGET("resourceMetadataSearch",q,limit,offset)
+  dataTaipeiCheck(response)
+  response
 }
