@@ -26,11 +26,13 @@ getResources <- function(tb, index) {
 }
 
 
-resourceParse <- function(req) {
-  
-  # 簡單parse以確認收到的req有抓出資料，可修改下列內容
-  ccc <- content(req)
-  print(ccc)
-  print("resource parsed test ok")
-  
+resourceParse <- function(response) {
+  result <- httr::content(response, as = "raw")
+  writeBin(result, temp <- tempfile())
+  if (Sys.info()["sysname"] %>% tolower != "windows") {
+    temp2 <- tempfile()
+    stopifnot(system(sprintf("iconv -f BIG-5 -t UTF-8 %s > %s", temp, temp2)) == 0)
+    temp <- temp2
+  }
+  data.table::fread(temp)
 }

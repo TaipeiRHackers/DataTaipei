@@ -1,8 +1,6 @@
 #'@export
 resourceAquire <- function(rid) {
-
-  urlAquire <- paste0("http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=",rid)
-  response <- httr::GET(urlAquire)
+  response <- dataTaipeiGET(scope = "resourceAquire", rid = rid, format = "csv")
   dataTaipeiCheck(response)
   resourceParse(response)
   
