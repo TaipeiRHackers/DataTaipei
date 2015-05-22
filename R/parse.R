@@ -1,5 +1,16 @@
-searchParse <- function(...) {
-  
+#'@importFrom magrittr %>%
+searchParse <- function(response) {
+  result <- httr::content(response, as = "parsed")$result
+  results <- result$results
+  name <- Reduce(union, lapply(results, names))
+  name1 <- setdiff(name, "resources")
+  retval <- lapply(name1, function(x) sapply(results, function(df) {
+    ifelse(is.null(df[[x]]), NA, df[[x]])
+  }))
+  retval %<>% data.table::as.data.table(retval) %>%
+    magrittr::set_colnames(name1)
+  attributes(retval) <- c(attributes(retval), result[which(names(result) != "results")], resources = lapply(results, `[[`, "resources"))
+  retval
 }
 
 resourceParse <- function(req) {
