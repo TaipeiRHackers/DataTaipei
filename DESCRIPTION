@@ -7,4 +7,4 @@ Author: Wush Wu, John Chen and Will Chang
 Maintainer: Wush Wu <wush978@gmail.com>
 Description: R Client for http://data.taipei
 License: GPL (>= 2)
-Imports: XML, RJSONIO, httr
+Imports: XML, RJSONIO, httr, magrittr, data.table
