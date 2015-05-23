@@ -16,6 +16,6 @@ resourceAquire
 \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section3.html}
 }
 \seealso{
-getResources()
+\code{\link{getResources}}
 }
 
