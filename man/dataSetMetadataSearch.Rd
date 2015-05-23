@@ -20,6 +20,6 @@ dataSetMetadataSearch
 This is the example of q advanced usage. Such as q=title:youbike cost:free, which will return the result's title contains "youbike" and cost contains "free". The method is "condition-1 condition-2 ...", which uses one blank space to separate each conditions, and you can input two and more conditions to query. Please see the references for more information.
 }
 \references{
-2.1 of \url{http://data.taipei/opendata/developer;jsessionid=4197BA531430955C04015CD2F2CF3699}
+\url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section1.html}
 }
 
