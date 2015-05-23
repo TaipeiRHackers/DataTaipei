@@ -9,18 +9,42 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Youbike
+### YouBike臺北市公共自行車站場地圖
 
-```{r}
-library(DataTaipei)
-library(ggmap)
-library(dplyr)
+利用DataTaipei套件搜尋youBike站場相關資料集，
+取得站場座標與各站空位數量等，以R 語言轉為Google Map呈現。
+
+```{r library}
+suppressPackageStartupMessages({
+  library(DataTaipei)
+  library(dplyr)
+  library(ggmap)
+})
+```
+
+### 搜尋資料集
+
+透過`dataSetMetadataSearch`，我們可取得關於youBike的搜尋結果：
+```{r rs, cache=TRUE}
 rs <- dataSetMetadataSearch(q = "youbike")
-# rs
-rid <- getResources(rs, 1)
-# rid
-suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
+```
 
+### 下載資料項目內容
+
+由dataset中的metadata解析出resource ID
+透過 `resourceAquire`，我們可取得資料項目內容
+
+```{r df, dependson="rs", cache=TRUE}
+rid <- getResources(rs, 1)
+suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
+```
+
+### 在Goole Map上呈現各站場位置
+
+在youBike相關資料中取得站場經緯度與空位數量
+以R 語言 ggmap套件轉為Google Map呈現
+
+```{r df2, dependson="df", cache=TRUE}
 # plot
 strsplit(rs$fieldDescription, "\r\n")
 df2 <- mutate(df, lat = as.numeric(lat), lng = as.numeric(lng))
