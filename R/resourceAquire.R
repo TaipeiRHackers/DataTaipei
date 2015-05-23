@@ -3,7 +3,7 @@
 #'@seealso \code{\link{getResources}}
 #'@references \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section3.html}
 #'@return A data.frame. The downloaded table of the resource.
-#'@example
+#'@examples
 #'\dontrun{
 #'rs <- dataSetMetadataSearch(q = "youbike")
 #'rid <- getResources(rs, 1)

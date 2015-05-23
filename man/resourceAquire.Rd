@@ -15,6 +15,13 @@ A data.frame. The downloaded table of the resource.
 \description{
 Download the Resource from \url{http://data.taipei}
 }
+\examples{
+\dontrun{
+rs <- dataSetMetadataSearch(q = "youbike")
+rid <- getResources(rs, 1)
+suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
+}
+}
 \references{
 \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section3.html}
 }

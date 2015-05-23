@@ -25,6 +25,13 @@ You could directly put the keyword into \code{q}. For example, \code{dataSetMeta
 
  For {offset}, here is an example. If \code{offset = 5}, the \code{dataSetMetadataSearch} will return the \code{1 + 5 = 6}th row.
 }
+\examples{
+\dontrun{
+rs <- dataSetMetadataSearch(q = "youbike")
+rid <- getResources(rs, 1)
+suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
+}
+}
 \references{
 \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section2.html}
 }

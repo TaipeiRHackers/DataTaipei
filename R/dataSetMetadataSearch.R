@@ -11,7 +11,7 @@
 #'@return A data.table. A table of related datasets.
 #'@seealso \code{\link{getResources}}
 #'@references \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section1.html}
-#'@example
+#'@examples
 #'\dontrun{
 #'rs <- dataSetMetadataSearch(q = "youbike")
 #'rid <- getResources(rs, 1)
