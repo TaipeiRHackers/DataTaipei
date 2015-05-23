@@ -2,7 +2,11 @@
 title: "R 套件：DataTaipei"
 author: "Wush Wu, John Chen and Will Chang"
 date: "2015年5月23日"
-output: ioslides_presentation
+output: 
+  ioslides_presentation:
+    widescreen: yes
+#subtitle: shiny
+#runtime: shiny
 ---
 
 ## R 是資料分析最常用的工具之一
@@ -166,8 +170,6 @@ group_by(data, `都市土地使用分區(LANDA_Z)`) %>%
   gvisBarChart(yvar = "count")
 ```
 
-## 動態圖表
-
 ## 分析
 
 ```{r, echo=TRUE, eval = FALSE, warning=FALSE, results='asis', cache=TRUE, dependson="estate"}
@@ -197,4 +199,31 @@ m <- dplyr::filter(data, `成交案件類型(CASE_T)` == "買賣") %>%
 print.xtable(xtable(m), type = "html")
 ```
 
+## 但是有時候仍然有500
 
+```{r, echo = TRUE, eval = TRUE}
+library(DataTaipei)
+rs <- dataSetMetadataSearch(q = "不動產")
+tryCatch({
+  data <- resourceAquire(getResources(rs, 1)$resourceId)
+}, error= function(e) print(e))
+```
+
+## 好資料壞資料 {.vcenter}
+
+我們正在考慮當遇到500的時候
+
+讓使用者自動輸入抱怨資訊
+
+然後發送e-mail給台北市資訊局
+
+## 我們的專案首頁
+
+<http://github.com/TaipeiRHackers/R>
+
+安裝：
+
+```r
+library(devtools)
+install_github("TaipeiRHackers/DataTaipei")
+```
