@@ -44,7 +44,7 @@ qmap("台北火車站", zoom = 16,legend = "topleft") +
 
 ## 臺北市公廁分佈
 
-```{r, echo=FALSE, eval = TRUE, warning=FALSE, results='hide', cache=TRUE}
+```{r toilet, echo=FALSE, eval = TRUE, warning=FALSE, results='hide', cache=TRUE}
 # 抓資料
 library(DataTaipei)
 rs <- dataSetMetadataSearch(q = "公廁")
@@ -75,7 +75,7 @@ qmap("台北火車站", zoom = 15,legend = "topleft") +
 
 ## 臺北市Youbike站點
 
-```{r, echo=FALSE, eval = TRUE, warning=FALSE, results='hide', cache=TRUE}
+```{r youbike, echo=FALSE, eval = TRUE, warning=FALSE, results='hide', cache=TRUE}
 # 抓資料
 suppressPackageStartupMessages({
   library(DataTaipei)
@@ -93,10 +93,108 @@ suppressMessages({
 })
 ```
 
-## 資料統計
+## 時間序列
 
-```{r}
+```{r, echo=TRUE, eval = FALSE, warning=FALSE, results='asis', cache=FALSE}
+library(DataTaipei)
+rs <- dataSetMetadataSearch("氣象")
+data <- resourceAquire(getResources(rs, 2)$resourceId[1])
+library(dplyr)
+data <- dplyr::filter(data, locationName == "臺北市") %>%
+  dplyr::mutate(startTime = as.POSIXct(strptime(startTime, "%Y-%m-%dT%H:%M:%S+08:00")), 氣溫=parameterName2) %>%
+  dplyr::select(startTime, 氣溫)
+library(dygraphs)
+library(xts)
+xts(data[,-1,with=FALSE], order.by = data$startTime) %>%
+  dygraph
 ```
 
-## 台北市實價登錄
+## 氣溫資料
+
+```{r weather, echo=FALSE, eval = TRUE, warning=FALSE, results='asis', cache=FALSE}
+suppressPackageStartupMessages({
+  library(DataTaipei)
+  library(dplyr)
+  library(dygraphs)
+  library(xts)
+})
+rs <- dataSetMetadataSearch("氣象")
+data <- resourceAquire(getResources(rs, 2)$resourceId[1])
+data <- dplyr::filter(data, locationName == "臺北市") %>%
+  dplyr::mutate(startTime = as.POSIXct(strptime(startTime, "%Y-%m-%dT%H:%M:%S+08:00")), 氣溫=parameterName2) %>%
+  dplyr::select(startTime, 氣溫)
+xts(data[,-1,with=FALSE], order.by = data$startTime) %>%
+  dygraph
+```
+
+## 資料統計
+
+```{r, echo=TRUE, eval = FALSE, warning=FALSE, results='hide'}
+# 抓資料
+library(DataTaipei)
+rs <- dataSetMetadataSearch(q = "不動產")
+data <- resourceAquire(getResources(rs, 4)$resourceId)
+# 整理資料
+library(dplyr)
+data <- dplyr::mutate(data, `SDATE`=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
+colnames(data)[-1] <- strsplit(rs$fieldDescription[4], "、", useBytes = TRUE)[[1]]
+# 行政區分佈
+library(googleVis)
+group_by(data, `都市土地使用分區(LANDA_Z)`) %>%
+  summarise(count = length(`_id`)) %>%
+  gvisBarChart(yvar = "count") %>% 
+  plot
+```
+
+## 台北市不動產交易資料
+
+```{r estate, echo=FALSE, eval = TRUE, warning=FALSE, results='asis', cache=TRUE}
+suppressPackageStartupMessages({
+  library(DataTaipei)
+  library(dplyr)
+  library(googleVis)
+})
+op <- options(gvis.plot.tag='chart')
+rs <- dataSetMetadataSearch(q = "不動產")
+data <- resourceAquire(getResources(rs, 4)$resourceId)
+# 整理資料
+data <- dplyr::mutate(data, `SDATE`=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
+colnames(data)[-1] <- strsplit(rs$fieldDescription[4], "、", useBytes = TRUE)[[1]]
+# 行政區分佈
+group_by(data, `都市土地使用分區(LANDA_Z)`) %>%
+  summarise(count = length(`_id`)) %>%
+  gvisBarChart(yvar = "count")
+```
+
+## 動態圖表
+
+## 分析
+
+```{r, echo=TRUE, eval = FALSE, warning=FALSE, results='asis', cache=TRUE, dependson="estate"}
+m <- dplyr::filter(data, `成交案件類型(CASE_T)` == "買賣") %>%
+  lm(formula = `交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)` ~
+     `單價是否含車位(UPNOTE)` +
+     `主要建材(MBUILD)` +
+     `行政區(DISTRICT)` +
+     `都市土地使用分區(LANDA_Z)`)
+```
+
+
+## 影響價格的因素
+
+```{r, echo=FALSE, eval = TRUE, warning=FALSE, results='asis', cache=TRUE, dependson="estate"}
+suppressPackageStartupMessages({
+  library(data.table)
+  library(dplyr)
+  library(xtable)
+})
+m <- dplyr::filter(data, `成交案件類型(CASE_T)` == "買賣") %>%
+  lm(formula = `交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)` ~
+     `單價是否含車位(UPNOTE)` +
+     `主要建材(MBUILD)` +
+     `行政區(DISTRICT)` +
+     `都市土地使用分區(LANDA_Z)`)
+print.xtable(xtable(m), type = "html")
+```
+
 
