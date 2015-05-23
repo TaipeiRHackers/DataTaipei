@@ -14,10 +14,18 @@ vignette: >
 ```{r}
 library(DataTaipei)
 library(ggmap)
+library(dplyr)
 rs <- dataSetMetadataSearch(q = "youbike")
-rs
+# rs
 rid <- getResources(rs, 1)
-rid
-df <- resourceAquire(rid$resourceId[1])
-# todo...
+# rid
+suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
+
+# plot
+strsplit(rs$fieldDescription, "\r\n")
+df2 <- mutate(df, lat = as.numeric(lat), lng = as.numeric(lng))
+bdy_location <- select(df2, lng, lat) %>% apply(MARGIN = 2, range)
+qmap(location = c(bdy_location[c(1, 3, 2, 4)]), legend = "topleft") +
+  geom_point(aes(x = lng, y = lat, size = bemp), data = df2)
+plot(g)
 ```
