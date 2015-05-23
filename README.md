@@ -15,3 +15,7 @@ install.packages('DataTaipei', type = 'source',
 [DataTaipei應用範例 - 台北市天氣資料](http://taipeirhackers.github.io/DataTaipei/weather.html)
 
 [DataTaipei應用範例 - 台北市不動產資料](http://taipeirhackers.github.io/DataTaipei/estate.html)
+
+## License
+
+GPL(>= 2)
