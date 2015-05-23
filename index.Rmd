@@ -209,9 +209,9 @@ tryCatch({
 }, error= function(e) print(e))
 ```
 
-## 好資料壞資料 {.vcenter}
+## 群眾壞資料篩選 {.vcenter}
 
-我們正在考慮當遇到500的時候
+我們**正在考慮**當下載錯誤時
 
 讓使用者自動輸入抱怨資訊
 
@@ -219,7 +219,7 @@ tryCatch({
 
 ## 我們的專案首頁
 
-<http://github.com/TaipeiRHackers/R>
+<http://github.com/TaipeiRHackers/DataTaipei>
 
 安裝：
 
@@ -227,3 +227,11 @@ tryCatch({
 library(devtools)
 install_github("TaipeiRHackers/DataTaipei")
 ```
+
+## 範例
+
+[DataTaipei應用範例 - 台北市youbike站點資料](http://taipeirhackers.github.io/DataTaipei/youbike.html)
+
+[DataTaipei應用範例 - 台北市天氣資料](http://taipeirhackers.github.io/DataTaipei/weather.html)
+
+[DataTaipei應用範例 - 台北市不動產資料](http://taipeirhackers.github.io/DataTaipei/estate.html)
