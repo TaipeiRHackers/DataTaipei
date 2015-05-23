@@ -61,7 +61,7 @@ df <- resourceAquire(rid)
 整理時間欄位後，再從`dataSetMetadataSearch`中取得欄位資訊：
 
 ```{r df2, dependson="df", warning=FALSE}
-df <- mutate(df, `交易年月(SDATE)`=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
+df <- mutate(df, `SDATE`=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
 colnames(df)[-1] <- strsplit(rs$fieldDescription[4], "、", useBytes = TRUE)[[1]]
 knitr::kable(dplyr::select(df, 
                     `成交案件類型(CASE_T)`,
