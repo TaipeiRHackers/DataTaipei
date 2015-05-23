@@ -105,8 +105,8 @@ rs</code></pre>
 ## 3: 5fe903f2-c939-4654-a85b-7cc4f408b28e 攜手玩科學13：千變萬化的氣象
 ## 4: 89cc02f5-72ac-40cc-b605-abc66250d5d7                       新絲路
 ##        type category   metadata_modified accrualPeriodicity
-## 1: 網路服務          2015-05-23 14:19:51               每天
-## 2: 網路服務          2015-05-23 14:19:02               每天
+## 1: 網路服務          2015-05-23 15:19:51               每天
+## 2: 網路服務          2015-05-23 15:19:01               每天
 ## 3:       NA       NA 2015-03-06 16:28:03                 NA
 ## 4:       NA       NA 2015-03-06 16:42:40                 NA
 ##                    contactEmail contactName   contactPhone cost costLaw
@@ -169,7 +169,7 @@ resource</code></pre>
 <pre><code>##                              resourceId       resourceName
 ## 1: e6831708-02b4-4ef8-98fa-4b4ce53459d9 weatherReport1.xml
 ##    resourceDescription      resourceUpdate format
-## 1:                     2015-05-23T14:19:01    XML</code></pre>
+## 1:                     2015-05-23T15:19:00    XML</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">rid &lt;-<span class="st"> </span>resource$resourceId[<span class="dv">1</span>]
 df &lt;-<span class="st"> </span><span class="kw">resourceAquire</span>(rid)
 df2 &lt;-<span class="st"> </span><span class="kw">filter</span>(df, locationName ==<span class="st"> &quot;臺北市&quot;</span>) %&gt;%
@@ -177,8 +177,8 @@ df2 &lt;-<span class="st"> </span><span class="kw">filter</span>(df, locationNam
 <span class="st">  </span>dplyr::<span class="kw">select</span>(startTime, 氣溫)
 <span class="kw">xts</span>(df2[,-<span class="dv">1</span>,<span class="dt">with=</span><span class="ot">FALSE</span>], <span class="dt">order.by =</span> df2$startTime) %&gt;%
 <span class="st">  </span>dygraph</code></pre>
-<p><div id="htmlwidget-742" style="width:288px;height:288px;" class="dygraphs"></div>
-<script type="application/json" data-for="htmlwidget-742">{ "x": {
+<p><div id="htmlwidget-6322" style="width:288px;height:288px;" class="dygraphs"></div>
+<script type="application/json" data-for="htmlwidget-6322">{ "x": {
  "attrs": {
  "labels": [ "hour", "氣溫" ],
 "legend": "auto",
