@@ -217,6 +217,8 @@ tryCatch({
 
 然後發送e-mail給台北市資訊局
 
+<center>![]("img/kp1.png")</center>
+
 ## 我們的專案首頁
 
 <http://github.com/TaipeiRHackers/DataTaipei>
