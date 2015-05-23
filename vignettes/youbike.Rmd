@@ -51,5 +51,4 @@ df2 <- dplyr::mutate(df, lat = as.numeric(lat), lng = as.numeric(lng))
 bdy_location <- dplyr::select(df2, lng, lat) %>% apply(MARGIN = 2, range)
 qmap(location = c(bdy_location[c(1, 3, 2, 4)]), zoom = 14,legend = "topleft") +
   geom_point(aes(x = lng, y = lat, size = bemp), colour = "blue",data = df2)
-plot(g)
 ```
