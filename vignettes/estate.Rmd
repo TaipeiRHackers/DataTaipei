@@ -1,0 +1,70 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, cache=FALSE}
+suppressPackageStartupMessages({
+  library(DataTaipei)
+  library(dplyr)
+  library(ggplot2)
+  library(knitr)
+})
+if (tolower(Sys.info()["sysname"]) == "darwin") par(family="STKaiti") 
+opts_chunk$set(cache=FALSE, echo=TRUE)
+```
+
+## 不動產
+
+利用DataTaipei套件搜尋不動產相關資料集，
+並作進一步的統計分析，展現R 語言的資料分析能力。
+
+### 搜尋資料集
+
+透過`dataSetMetadataSearch`，我們可以取得關於不動產的搜尋結果：
+
+```{r rs, cache=TRUE}
+rs <- dataSetMetadataSearch("不動產")
+knitr::kable(rs)
+```
+
+### 下載實價登錄資訊
+
+本文件以第四筆的搜尋結果為例。
+
+```{r df, dependson="rs", cache=TRUE}
+resources <- getResources(rs, 4)
+rid <- resources$resourceId[1]
+df <- resourceAquire(rid)
+# df
+```
+
+### 整理實價登錄資訊
+
+整理時間欄位後，再從`dataSetMetadataSearch`中取得欄位資訊：
+
+```{r df2, dependson="df"}
+df <- mutate(df, "交易年月(SDATE)"=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
+colnames(df)[-1] <- strsplit(rs$fieldDescription[4], "、", useBytes = TRUE)[[1]]
+knitr::kable(select(df, 
+                    `成交案件類型(CASE_T)`,
+                    `行政區(DISTRICT)`,
+                    `都市土地使用分區(LANDA_Z)`,
+                    `交易總價(萬元)/租賃總價(萬元)(TPRICE)`,
+                    `交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)`
+                    ))
+```
+
+### 簡易分析
+
+#### 都市土地使用分區的交易比率
+
+```{r df3, dependson="df2"}
+barplot(table(df[["都市土地使用分區(LANDA_Z)"]]))
+```
