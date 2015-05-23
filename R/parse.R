@@ -16,6 +16,7 @@ searchParse <- function(response) {
   retval
 }
 
+#'@export
 getResources <- function(tb, index) {
   .resources <- attr(tb, "resources")[[index]]
   name <- Reduce(union, lapply(.resources, names))
