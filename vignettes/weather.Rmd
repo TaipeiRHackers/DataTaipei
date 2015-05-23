@@ -25,7 +25,7 @@ rid <- resource$resourceId[1]
 df <- resourceAquire(rid)
 df2 <- filter(df, locationName == "臺北市") %>%
   mutate(startTime = as.POSIXct(strptime(startTime, "%Y-%m-%dT%H:%M:%S+08:00")), 氣溫=parameterName2) %>%
-  select(startTime, 氣溫)
+  dplyr::select(startTime, 氣溫)
 xts(df2[,-1,with=FALSE], order.by = df2$startTime) %>%
   dygraph
 ```

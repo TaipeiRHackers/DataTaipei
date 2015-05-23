@@ -13,7 +13,7 @@ resourceAquire(resourceId)
 resourceAquire
 }
 \references{
-2.3 of \url{http://data.taipei/opendata/developer;jsessionid=4197BA531430955C04015CD2F2CF3699}
+\url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section3.html}
 }
 \seealso{
 getResources()
