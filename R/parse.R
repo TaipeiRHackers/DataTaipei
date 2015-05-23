@@ -16,6 +16,10 @@ searchParse <- function(response) {
   retval
 }
 
+#'@title Get Resource From Downloaded Table
+#'@param tb (data.table). The output of \code{\link{dataSetMetadataSearch}} or \code{\link{resourceMetadataSearch}}.
+#'@param index (integer). The index of target.
+#'@return A data.frame. The resources of \code{index}th row in \code{tb} will be returned. 
 #'@export
 getResources <- function(tb, index) {
   .resources <- attr(tb, "resources")[[index]]
