@@ -13,7 +13,7 @@ vignette: >
 suppressPackageStartupMessages({
   library(knitr)
 })
-if (tolower(Sys.info()["sysname"]) == "darwin") par(family="STKaiti") 
+# if (tolower(Sys.info()["sysname"]) == "darwin") par(family="STKaiti") 
 opts_chunk$set(cache=FALSE, echo=TRUE)
 ```
 
@@ -25,9 +25,13 @@ opts_chunk$set(cache=FALSE, echo=TRUE)
 ### 載入套件
 
 ```{r library}
-library(DataTaipei)
-library(dplyr)
-library(ggplot2)
+suppressPackageStartupMessages({
+  library(DataTaipei)
+  library(dplyr)
+  library(googleVis)
+  # for rmarkdown
+  op <- options(gvis.plot.tag='chart')
+})
 ```
 
 ### 搜尋資料集
@@ -54,8 +58,8 @@ df <- resourceAquire(rid)
 
 整理時間欄位後，再從`dataSetMetadataSearch`中取得欄位資訊：
 
-```{r df2, dependson="df"}
-df <- mutate(df, "交易年月(SDATE)"=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
+```{r df2, dependson="df", warning=FALSE}
+df <- mutate(df, `交易年月(SDATE)`=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
 colnames(df)[-1] <- strsplit(rs$fieldDescription[4], "、", useBytes = TRUE)[[1]]
 knitr::kable(select(df, 
                     `成交案件類型(CASE_T)`,
@@ -63,13 +67,23 @@ knitr::kable(select(df,
                     `都市土地使用分區(LANDA_Z)`,
                     `交易總價(萬元)/租賃總價(萬元)(TPRICE)`,
                     `交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)`
-                    ))
+                    ) %>% head)
 ```
 
 ### 簡易分析
 
-#### 都市土地使用分區的交易比率
+#### 都市土地使用分區的交易數
 
-```{r df3, dependson="df2"}
-barplot(table(df[["都市土地使用分區(LANDA_Z)"]]))
+```{r, results='asis'}
+group_by(df, `都市土地使用分區(LANDA_Z)`) %>%
+  summarise(count = length(`_id`)) %>%
+  gvisBarChart(yvar = "count")
+```
+
+#### 行政區的交易數
+
+```{r, results='asis'}
+group_by(df, `都市土地使用分區(LANDA_Z)`) %>%
+  summarise(count = length(`_id`)) %>%
+  gvisBarChart(yvar = "count")
 ```
