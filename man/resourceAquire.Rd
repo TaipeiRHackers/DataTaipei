@@ -2,15 +2,18 @@
 % Please edit documentation in R/resourceAquire.R
 \name{resourceAquire}
 \alias{resourceAquire}
-\title{resourceAquire}
+\title{Download the Resource from \url{http://data.taipei}}
 \usage{
 resourceAquire(resourceId)
 }
 \arguments{
-\item{resourceId}{which is one column of query result by using getResources(). Please read seealso to get more information.}
+\item{resourceId}{(character). The id of the resource.}
+}
+\value{
+A data.frame. The downloaded table of the resource.
 }
 \description{
-resourceAquire
+Download the Resource from \url{http://data.taipei}
 }
 \references{
 \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section3.html}

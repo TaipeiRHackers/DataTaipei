@@ -2,30 +2,33 @@
 % Please edit documentation in R/dataSetMetadataSearch.R
 \name{dataSetMetadataSearch}
 \alias{dataSetMetadataSearch}
-\title{dataSetMetadataSearch}
+\title{Search Dataset of \url{http://data.taipei} via Metadata}
 \usage{
 dataSetMetadataSearch(q = NULL, limit = 1000, offset = 0)
 }
 \arguments{
-\item{q}{(character). Keyword of datasets. Read the details for more information.}
+\item{q}{(character). Keyword of the datasets. Please read the details for more information.}
 
-\item{limit}{(integer). Limit quanty of returned records to set a proper scale of data output.}
+\item{limit}{(integer). Limit the number of returned records.}
 
-\item{offset}{(integer). The start position to show of query output.  read the details for more information.}
+\item{offset}{(integer). The start position of the returned records.  Please read the details for more information.}
+}
+\value{
+A data.table. A table of related datasets.
 }
 \description{
-dataSetMetadataSearch
+Search Dataset of \url{http://data.taipei} via Metadata
 }
 \details{
-This is the example of q advanced usage. Such as q="title:youbike cost:free", which will return the result's title contains "youbike" and cost contains "free". The method is "condition-1 condition-2 ...", which uses one blank space to separate each condition, and you can input one or more conditions to query.
+You could directly put the keyword into \code{q}. For example, \code{dataSetMetadataSearch(q = "youbike")}.
+ \code{q} also accept advanced usage such as \code{q="title:youbike cost:free"} which will return the records whose title contains "youbike" and cost contains "free". The schema is "field-1:condition-1 field-2:condition-2 ...". The blank space separates each condition. For more details, please check the reference.
 
-Please read the references for more information.
-
-  This is the example of offset usage. Such as offset = 5, which will return the 1 + 5 = 6th dataset.
-
-  Please read the references for more information.
+ For {offset}, here is an example. If \code{offset = 5}, the \code{dataSetMetadataSearch} will return the \code{1 + 5 = 6}th row.
 }
 \references{
 \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section1.html}
+}
+\seealso{
+\code{\link{getResources}}
 }
 
