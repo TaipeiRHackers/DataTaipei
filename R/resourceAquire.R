@@ -1,7 +1,7 @@
 #'@title resourceAquire
 #'@param resourceId which is one column of query result by using getResources(). Please read seealso to get more information.
 #'@seealso getResources()
-#'@references 2.3 of \url{http://data.taipei/opendata/developer;jsessionid=4197BA531430955C04015CD2F2CF3699}
+#'@references \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section3.html}
 #'@export
 resourceAquire <- function(resourceId) {
   response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = "csv")
