@@ -4,8 +4,8 @@ R Client for http://data.taipei/
 ## 安裝
 
 ```r
-library(devtools)
-install_github('TaipeiRHackers/DataTaipei')
+install.packages('DataTaipei', type = 'source',
+  repos = c('http://taipeirhackers.github.io/R', 'http://cran.csie.ntu.edu.tw'))
 ```
 
 ## 範例
