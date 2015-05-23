@@ -11,9 +11,6 @@ vignette: >
 
 ```{r setup, include=FALSE, cache=FALSE}
 suppressPackageStartupMessages({
-  library(DataTaipei)
-  library(dplyr)
-  library(ggplot2)
   library(knitr)
 })
 if (tolower(Sys.info()["sysname"]) == "darwin") par(family="STKaiti") 
@@ -24,6 +21,14 @@ opts_chunk$set(cache=FALSE, echo=TRUE)
 
 利用DataTaipei套件搜尋不動產相關資料集，
 並作進一步的統計分析，展現R 語言的資料分析能力。
+
+### 載入套件
+
+```{r library}
+library(DataTaipei)
+library(dplyr)
+library(ggplot2)
+```
 
 ### 搜尋資料集
 
