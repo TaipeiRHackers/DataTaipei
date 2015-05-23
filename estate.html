@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Wush Wu, John Chen and Will Chang" />
+
+<meta name="date" content="2015-05-23" />
+
+<title>DataTaipei應用範例 - 台北市不動產資料</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20700px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%201%2E35%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%2010px%3B%0A%20%20padding%3A%204px%3B%0A%20%20width%3A%20400px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%20%7B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%200%2E25em%200%2E75em%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20white%2Dspace%3A%20pre%2Dwrap%3B%20%20%20%20%2F%2A%20Wrap%20long%20lines%20%2A%2F%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200px%2010px%200px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0A%20%20font%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%200px%3B%0A%7D%0A%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%3A%201px%20solid%20%23DDDDDD%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">DataTaipei應用範例 - 台北市不動產資料</h1>
+<h4 class="author"><em>Wush Wu, John Chen and Will Chang</em></h4>
+<h4 class="date"><em>2015-05-23</em></h4>
+</div>
+
+
+<div class="section level2">
+<h2>不動產</h2>
+<p>利用DataTaipei套件搜尋不動產相關資料集， 並作進一步的統計分析，展現R 語言的資料分析能力。</p>
+<div class="section level3">
+<h3>載入套件</h3>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">suppressPackageStartupMessages</span>({
+  <span class="kw">library</span>(DataTaipei)
+  <span class="kw">library</span>(dplyr)
+  <span class="kw">library</span>(googleVis)
+  <span class="kw">library</span>(memisc)
+  <span class="kw">library</span>(xtable)
+  <span class="co"># for rmarkdown</span>
+  op &lt;-<span class="st"> </span><span class="kw">options</span>(<span class="dt">gvis.plot.tag=</span><span class="st">'chart'</span>)
+})</code></pre>
+<pre><code>## Warning: package 'memisc' was built under R version 3.1.3</code></pre>
+<pre><code>## Warning: package 'MASS' was built under R version 3.1.3</code></pre>
+</div>
+<div class="section level3">
+<h3>搜尋資料集</h3>
+<p>透過<code>dataSetMetadataSearch</code>，我們可以取得關於不動產的搜尋結果：</p>
+<pre class="sourceCode r"><code class="sourceCode r">rs &lt;-<span class="st"> </span><span class="kw">dataSetMetadataSearch</span>(<span class="st">&quot;不動產&quot;</span>)
+knitr::<span class="kw">kable</span>(rs)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">id</th>
+<th align="left">title</th>
+<th align="left">type</th>
+<th align="left">category</th>
+<th align="left">metadata_modified</th>
+<th align="left">accrualPeriodicity</th>
+<th align="left">contactEmail</th>
+<th align="left">contactName</th>
+<th align="left">contactPhone</th>
+<th align="left">cost</th>
+<th align="left">costLaw</th>
+<th align="left">costURL</th>
+<th align="left">description</th>
+<th align="left">fieldDescription</th>
+<th align="left">issued</th>
+<th align="left">language</th>
+<th align="left">numberOfData</th>
+<th align="left">orgId</th>
+<th align="left">orgName</th>
+<th align="left">organizationContactEmail</th>
+<th align="left">organizationContactName</th>
+<th align="left">organizationContactPhone</th>
+<th align="left">organizationName</th>
+<th align="left">relatedUrl</th>
+<th align="left">spatial</th>
+<th align="left">subOrgId</th>
+<th align="left">subOrgName</th>
+<th align="left">temporalCoverageFrom</th>
+<th align="left">temporalCoverageTo</th>
+<th align="left">tag</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">c59c1a1f-732b-4976-a1cc-a9fb8784af51</td>
+<td align="left">不動產經紀業裁罰</td>
+<td align="left"></td>
+<td align="left">原始資料</td>
+<td align="left">公共資訊 2015-0</td>
+<td align="left">5-14 18:58:50 每年</td>
+<td align="left"><a href="mailto:oa-0835@mai">oa-0835@mai</a></td>
+<td align="left">l.taipei.gov.t</td>
+<td align="left">w 謝偉薇</td>
+<td align="left">27287</td>
+<td align="left">444</td>
+<td align="left">免費</td>
+<td align="left">不動產經紀業者經本局查處違反不動產經紀業管理條例予以裁罰之相關資料</td>
+<td align="left">裁處日期、業者名稱、裁罰金額、違反法條</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2015-05-14 BIG5</td>
+<td align="left">379700</td>
+<td align="left">000A 臺北市政府地政局</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">臺北市</td>
+<td align="left">政府地政局</td>
+<td align="left">2015-01-01 2015-04-30 不動產經紀業裁罰,</td>
+</tr>
+<tr class="even">
+<td align="left">9527ea34-7c55-4c23-9f0e-80164f888f06</td>
+<td align="left">捷運聯合開發公有不動產標售物</td>
+<td align="left">件資料</td>
+<td align="left">原</td>
+<td align="left">始資料 交通及通訊</td>
+<td align="left">2015-05-22 10:25:5</td>
+<td align="left">0 不定期 4</td>
+<td align="left"><a href="mailto:1410@trts.dort">1410@trts.dort</a></td>
+<td align="left">s.gov.tw 潘玉娟</td>
+<td align="left"></td>
+<td align="left">02-252</td>
+<td align="left">15550-8071</td>
+<td align="left">免費 捷運聯合開發公有不動產標售物件資料</td>
+<td align="left">門牌號碼、主建物面積、附屬建物面積、產權面積、標售底價、押標金</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2015-05-13 中</td>
+<td align="left">文 139筆</td>
+<td align="left">379510000H 臺北市政府捷運</td>
+<td align="left">工程局 <a href="mailto:41410@trts">41410@trts</a></td>
+<td align="left">.dorts.gov.tw</td>
+<td align="left">潘玉</td>
+<td align="left">娟</td>
+<td align="left"></td>
+<td align="left">02-25215550-8071</td>
+<td align="left">臺北市政府捷運工</td>
+<td align="left">程局 2015-04-08 2015-05-22 捷運,標售,聯合開發,</td>
+</tr>
+<tr class="odd">
+<td align="left">27b9c616-f68c-4856-bb39-ef9ed0478c96</td>
+<td align="left">捷運聯合開發公有不動產非統一</td>
+<td align="left">經營部分</td>
+<td align="left">預計出租標的</td>
+<td align="left">原始資料 交通及通</td>
+<td align="left">訊 2015-05-18 11</td>
+<td align="left">:00:12 不定期</td>
+<td align="left"><a href="mailto:hcchan@trt">hcchan@trt</a></td>
+<td align="left">s.dorts.gov.tw</td>
+<td align="left">蔣曉珍</td>
+<td align="left"></td>
+<td align="left">02-2521555</td>
+<td align="left">0-8547 免費 捷運聯合開發公有不動產非統一經營部分預計出租標的</td>
+<td align="left">捷運線別</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">基地名稱</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">使用用途</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">戶數</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">坪數分佈</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">車位</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">租金分佈</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">承辦人</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">承辦人聯絡電話</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">2015-04-30 中文 11 379510000H 臺北市政府捷運工程局 <a href="mailto:ychwang@trts.dorts.gov.tw">ychwang@trts.dorts.gov.tw</a> 黃月琴 25215550#8546 臺北市政府捷運工程局 2015-01-01 2015-04-30 捷運,聯合開發,</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">a9a97996-3a55-46c8-9076-e5ebdefad6dc</td>
+<td align="left">實價周報</td>
+<td align="left">原始</td>
+<td align="left">資料 購屋</td>
+<td align="left">及遷徙 2015-05-20</td>
+<td align="left">05:50:38 每週</td>
+<td align="left"><a href="mailto:oa-0779@mail.ta">oa-0779@mail.ta</a></td>
+<td align="left">ipei.gov.tw</td>
+<td align="left">張家銘 02</td>
+<td align="left">-272874</td>
+<td align="left">24-7424</td>
+<td align="left">免費 無</td>
+<td align="left">無 臺北市不動產成交案件實際資訊申報登錄資訊(係為產製當時之資料，後續系統維護致資料異動，可利用臺北市不動產資訊與居住服務入口網(<a href="http://tred.gov.taipei" class="uri">http://tred.gov.taipei</a> /tr</td>
+<td align="left">ueprice/trueprice-a-1.aspx)所提供不動產交易實價查詢功能查閱最新實價資訊狀態，該系統會同步更新買賣、預售屋及租賃之交易實價資料。) 成交案件類型(CASE_T)、行政區(DISTRICT)、交易標的/租賃標的(CASE_F)、土地區段位置或建物區門牌(LOCATION)、土地移轉總面積(坪)/土地租賃總面積(坪)(LANDA)、都市土地使用分區(LANDA_Z)、交易年月(SDATE)、交易筆棟數/租賃筆棟數(SCNT)、移轉層次(SBUILD)、總樓層數(TBUILD)、建物型態(BUITYPE)、主要用途(PBUILD)、主要建材(MBUILD)、建築完成年月(FDATE)、建物移轉總面積(坪)/租賃總面積(坪)(FAREA)、建物現況</td>
+<td align="left">格局_房(BUILD</td>
+<td align="left">_R)、建物現</td>
+<td align="left">況格局_廳(BUILD</td>
+<td align="left">_L)、建物現況</td>
+<td align="left">格局_衛(BUILD</td>
+<td align="left"><em>B)、建物現況格局_隔間(BUILD</em></td>
+<td align="left">P)、有無管理組織(RULE)、有</td>
+<td align="left">無附傢俱(BUILD_C)、交易總價</td>
+<td align="left">(萬元)/租賃總價(萬元</td>
+<td align="left">)(TPRICE)、交</td>
+<td align="left">易單價(萬元</td>
+<td align="left">/坪)/租賃單</td>
+<td align="left">價(元/坪)(UPR</td>
+<td align="left">ICE)、單價是否含車位(UP</td>
+<td align="left">NOTE)、車位類別及數量</td>
+<td align="left">(PARKTYPE)、車位移轉總面積(坪)/車位租賃總面積(坪)(PAREA)、車位移轉總價(萬元)/車位租賃總價(元)(PPRICE)、備註(RMNOTE) 每週三 中文 1617 379700000A 臺北市政府地政局 <a href="mailto:oa-0779@mail.taipei.gov.tw">oa-0779@mail.taipei.gov.tw</a> 張家銘 02-27287424-7424 臺北市政府地政局 當週揭露之實價登錄資訊 當週揭露之實價登錄資訊 不動產,交易實際資訊,實價查詢,實價登錄,</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3>下載實價登錄資訊</h3>
+<p>本文件以第四筆的搜尋結果為例。</p>
+<pre class="sourceCode r"><code class="sourceCode r">resources &lt;-<span class="st"> </span><span class="kw">getResources</span>(rs, <span class="dv">4</span>)
+rid &lt;-<span class="st"> </span>resources$resourceId[<span class="dv">1</span>]
+df &lt;-<span class="st"> </span><span class="kw">resourceAquire</span>(rid)
+<span class="co"># df</span></code></pre>
+</div>
+<div class="section level3">
+<h3>整理實價登錄資訊</h3>
+<p>整理時間欄位後，再從<code>dataSetMetadataSearch</code>中取得欄位資訊：</p>
+<pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">mutate</span>(df, <span class="st">`</span><span class="dt">交易年月(SDATE)</span><span class="st">`</span>=<span class="kw">as.Date</span>(<span class="kw">as.character</span>(SDATE +<span class="st"> </span><span class="dv">19110000</span>),<span class="st">&quot;%Y%m%d&quot;</span>))
+<span class="kw">colnames</span>(df)[-<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">strsplit</span>(rs$fieldDescription[<span class="dv">4</span>], <span class="st">&quot;、&quot;</span>, <span class="dt">useBytes =</span> <span class="ot">TRUE</span>)[[<span class="dv">1</span>]]
+knitr::<span class="kw">kable</span>(dplyr::<span class="kw">select</span>(df, 
+                    <span class="st">`</span><span class="dt">成交案件類型(CASE_T)</span><span class="st">`</span>,
+                    <span class="st">`</span><span class="dt">行政區(DISTRICT)</span><span class="st">`</span>,
+                    <span class="st">`</span><span class="dt">都市土地使用分區(LANDA_Z)</span><span class="st">`</span>,
+                    <span class="st">`</span><span class="dt">交易總價(萬元)/租賃總價(萬元)(TPRICE)</span><span class="st">`</span>,
+                    <span class="st">`</span><span class="dt">交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)</span><span class="st">`</span>
+                    ) %&gt;%<span class="st"> </span>head)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">成交案件類型(CASE</th>
+<th align="left">_T) 行政區(DIS</th>
+<th align="left">TRICT) 都市土地使用</th>
+<th align="left">分區(LANDA_Z) 交易總價(萬</th>
+<th align="left">元)/租賃總價(萬元)(TPRICE) 交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">買賣</td>
+<td align="left">內湖區</td>
+<td align="left">工</td>
+<td align="left"></td>
+<td align="left">150 0.00</td>
+</tr>
+<tr class="even">
+<td align="left">買賣</td>
+<td align="left">松山區</td>
+<td align="left">其他</td>
+<td align="left"></td>
+<td align="left">325 0.00</td>
+</tr>
+<tr class="odd">
+<td align="left">買賣</td>
+<td align="left">大安區</td>
+<td align="left">其他</td>
+<td align="left"></td>
+<td align="left">6600 113.34</td>
+</tr>
+<tr class="even">
+<td align="left">買賣</td>
+<td align="left">內湖區</td>
+<td align="left">住</td>
+<td align="left"></td>
+<td align="left">2085 78.21</td>
+</tr>
+<tr class="odd">
+<td align="left">租賃</td>
+<td align="left">中山區</td>
+<td align="left">商</td>
+<td align="left"></td>
+<td align="left">2 1382.49</td>
+</tr>
+<tr class="even">
+<td align="left">租賃</td>
+<td align="left">中山區</td>
+<td align="left">商</td>
+<td align="left"></td>
+<td align="left">7 1143.79</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level3">
+<h3>簡易分析</h3>
+<div class="section level4">
+<h4>都市土地使用分區的交易數</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_by</span>(df, <span class="st">`</span><span class="dt">都市土地使用分區(LANDA_Z)</span><span class="st">`</span>) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">length</span>(<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>)) %&gt;%
+<span class="st">  </span><span class="kw">gvisBarChart</span>(<span class="dt">yvar =</span> <span class="st">&quot;count&quot;</span>)</code></pre>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>
+BarChartID3a35ada5e57
+</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<style type="text/css">
+body {
+  color: #444444;
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 75%;
+  }
+  a {
+  color: #4D87C7;
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+<p><!-- BarChart generated in R 3.1.2 by googleVis 0.5.6 package --> <!-- Sat May 23 15:06:26 2015 --></p>
+<!-- jsHeader -->
+<script type="text/javascript">
+ 
+// jsData 
+function gvisDataBarChartID3a35ada5e57 () {
+var data = new google.visualization.DataTable();
+var datajson =
+[
+ [
+ "工",
+26 
+],
+[
+ "其他",
+88 
+],
+[
+ "住",
+448 
+],
+[
+ "商",
+308 
+],
+[
+ "",
+20 
+],
+[
+ "農",
+2 
+] 
+];
+data.addColumn('string','都市土地使用分區(LANDA_Z)');
+data.addColumn('number','count');
+data.addRows(datajson);
+return(data);
+}
+ 
+// jsDrawChart
+function drawChartBarChartID3a35ada5e57() {
+var data = gvisDataBarChartID3a35ada5e57();
+var options = {};
+options["allowHtml"] = true;
+
+    var chart = new google.visualization.BarChart(
+    document.getElementById('BarChartID3a35ada5e57')
+    );
+    chart.draw(data,options);
+    
+
+}
+  
+ 
+// jsDisplayChart
+(function() {
+var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+var chartid = "corechart";
+  
+// Manually see if chartid is in pkgs (not all browsers support Array.indexOf)
+var i, newPackage = true;
+for (i = 0; newPackage && i < pkgs.length; i++) {
+if (pkgs[i] === chartid)
+newPackage = false;
+}
+if (newPackage)
+  pkgs.push(chartid);
+  
+// Add the drawChart function to the global list of callbacks
+callbacks.push(drawChartBarChartID3a35ada5e57);
+})();
+function displayChartBarChartID3a35ada5e57() {
+  var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+  var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+  window.clearTimeout(window.__gvisLoad);
+  // The timeout is set to 100 because otherwise the container div we are
+  // targeting might not be part of the document yet
+  window.__gvisLoad = setTimeout(function() {
+  var pkgCount = pkgs.length;
+  google.load("visualization", "1", { packages:pkgs, callback: function() {
+  if (pkgCount != pkgs.length) {
+  // Race condition where another setTimeout call snuck in after us; if
+  // that call added a package, we must not shift its callback
+  return;
+}
+while (callbacks.length > 0)
+callbacks.shift()();
+} });
+}, 100);
+}
+ 
+// jsFooter
+</script>
+<!-- jsChart -->
+<script src="data:text/javascript; charset=utf-8,if%28%21window%5B%27googleLT%5F%27%5D%29%7Bwindow%5B%27googleLT%5F%27%5D%3D%28new%20Date%28%29%29%2EgetTime%28%29%3B%7Dif%20%28%21window%5B%27google%27%5D%29%20%7B%0Awindow%5B%27google%27%5D%20%3D%20%7B%7D%3B%0A%7D%0Aif%20%28%21window%5B%27google%27%5D%5B%27loader%27%5D%29%20%7B%0Awindow%5B%27google%27%5D%5B%27loader%27%5D%20%3D%20%7B%7D%3B%0Agoogle%2Eloader%2EServiceBase%20%3D%20%27https%3A%2F%2Fwww%2Egoogle%2Ecom%2Fuds%27%3B%0Agoogle%2Eloader%2EGoogleApisBase%20%3D%20%27https%3A%2F%2Fajax%2Egoogleapis%2Ecom%2Fajax%27%3B%0Agoogle%2Eloader%2EApiKey%20%3D%20%27notsupplied%27%3B%0Agoogle%2Eloader%2EKeyVerified%20%3D%20true%3B%0Agoogle%2Eloader%2ELoadFailure%20%3D%20false%3B%0Agoogle%2Eloader%2ESecure%20%3D%20true%3B%0Agoogle%2Eloader%2EGoogleLocale%20%3D%20%27www%2Egoogle%2Ecom%27%3B%0Agoogle%2Eloader%2EClientLocation%20%3D%20null%3B%0Agoogle%2Eloader%2EAdditionalParams%20%3D%20%27%27%3B%0A%28function%28%29%20%7Bvar%20d%3DencodeURIComponent%2Cg%3Dwindow%2Ch%3Ddocument%3Bfunction%20l%28a%2Cb%29%7Breturn%20a%2Eload%3Db%7Dvar%20m%3D%22replace%22%2Cn%3D%22charAt%22%2Cq%3D%22getTime%22%2Cr%3D%22setTimeout%22%2Ct%3D%22push%22%2Cu%3D%22indexOf%22%2Cv%3D%22ServiceBase%22%2Cw%3D%22name%22%2Cx%3D%22length%22%2Cy%3D%22prototype%22%2Cz%3D%22loader%22%2CA%3D%22substring%22%2CB%3D%22join%22%2CC%3D%22toLowerCase%22%3Bfunction%20D%28a%29%7Breturn%20a%20in%20E%3FE%5Ba%5D%3AE%5Ba%5D%3D%2D1%21%3Dnavigator%2EuserAgent%5BC%5D%28%29%5Bu%5D%28a%29%7Dvar%20E%3D%7B%7D%3Bfunction%20F%28a%2Cb%29%7Bvar%20c%3Dfunction%28%29%7B%7D%3Bc%2Eprototype%3Db%5By%5D%3Ba%2EU%3Db%5By%5D%3Ba%2Eprototype%3Dnew%20c%7D%0Afunction%20G%28a%2Cb%2Cc%29%7Bvar%20e%3DArray%5By%5D%2Eslice%2Ecall%28arguments%2C2%29%7C%7C%5B%5D%3Breturn%20function%28%29%7Breturn%20a%2Eapply%28b%2Ce%2Econcat%28Array%5By%5D%2Eslice%2Ecall%28arguments%29%29%29%7D%7Dfunction%20H%28a%29%7Ba%3DError%28a%29%3Ba%2EtoString%3Dfunction%28%29%7Breturn%20this%2Emessage%7D%3Breturn%20a%7Dfunction%20I%28a%2Cb%29%7Bfor%28var%20c%3Da%2Esplit%28%2F%5C%2E%2F%29%2Ce%3Dg%2Cf%3D0%3Bf%3Cc%5Bx%5D%2D1%3Bf%2B%2B%29e%5Bc%5Bf%5D%5D%7C%7C%28e%5Bc%5Bf%5D%5D%3D%7B%7D%29%2Ce%3De%5Bc%5Bf%5D%5D%3Be%5Bc%5Bc%5Bx%5D%2D1%5D%5D%3Db%7Dfunction%20J%28a%2Cb%2Cc%29%7Ba%5Bb%5D%3Dc%7Dif%28%21K%29var%20K%3DI%3Bif%28%21L%29var%20L%3DJ%3Bgoogle%5Bz%5D%2Ev%3D%7B%7D%3BK%28%22google%2Eloader%2Ecallbacks%22%2Cgoogle%5Bz%5D%2Ev%29%3Bvar%20M%3D%7B%7D%2CN%3D%7B%7D%3Bgoogle%5Bz%5D%2Eeval%3D%7B%7D%3BK%28%22google%2Eloader%2Eeval%22%2Cgoogle%5Bz%5D%2Eeval%29%3B%0Al%28google%2Cfunction%28a%2Cb%2Cc%29%7Bfunction%20e%28a%29%7Bvar%20b%3Da%2Esplit%28%22%2E%22%29%3Bif%282%3Cb%5Bx%5D%29throw%20H%28%22Module%3A%20%27%22%2Ba%2B%22%27%20not%20found%21%22%29%3B%22undefined%22%21%3Dtypeof%20b%5B1%5D%26%26%28f%3Db%5B0%5D%2Cc%2Epackages%3Dc%2Epackages%7C%7C%5B%5D%2Cc%2Epackages%5Bt%5D%28b%5B1%5D%29%29%7Dvar%20f%3Da%3Bc%3Dc%7C%7C%7B%7D%3Bif%28a%20instanceof%20Array%7C%7Ca%26%26%22object%22%3D%3Dtypeof%20a%26%26%22function%22%3D%3Dtypeof%20a%5BB%5D%26%26%22function%22%3D%3Dtypeof%20a%2Ereverse%29for%28var%20k%3D0%3Bk%3Ca%5Bx%5D%3Bk%2B%2B%29e%28a%5Bk%5D%29%3Belse%20e%28a%29%3Bif%28a%3DM%5B%22%3A%22%2Bf%5D%29%7Bc%26%26%21c%2Elanguage%26%26c%2Elocale%26%26%28c%2Elanguage%3Dc%2Elocale%29%3Bc%26%26%22string%22%3D%3Dtypeof%20c%2Ecallback%26%26%28k%3Dc%2Ecallback%2Ck%2Ematch%28%2F%5E%5B%5B%5C%5DA%2DZa%2Dz0%2D9%2E%5F%5D%2B%24%2F%29%26%26%28k%3Dg%2Eeval%28k%29%2Cc%2Ecallback%3D%0Ak%29%29%3Bif%28%28k%3Dc%26%26null%21%3Dc%2Ecallback%29%26%26%21a%2Es%28b%29%29throw%20H%28%22Module%3A%20%27%22%2Bf%2B%22%27%20must%20be%20loaded%20before%20DOM%20onLoad%21%22%29%3Bk%3Fa%2Em%28b%2Cc%29%3Fg%5Br%5D%28c%2Ecallback%2C0%29%3Aa%2Eload%28b%2Cc%29%3Aa%2Em%28b%2Cc%29%7C%7Ca%2Eload%28b%2Cc%29%7Delse%20throw%20H%28%22Module%3A%20%27%22%2Bf%2B%22%27%20not%20found%21%22%29%3B%7D%29%3BK%28%22google%2Eload%22%2Cgoogle%2Eload%29%3B%0Agoogle%2ET%3Dfunction%28a%2Cb%29%7Bb%3F%280%3D%3DO%5Bx%5D%26%26%28P%28g%2C%22load%22%2CQ%29%2C%21D%28%22msie%22%29%26%26%21D%28%22safari%22%29%26%26%21D%28%22konqueror%22%29%26%26D%28%22mozilla%22%29%7C%7Cg%2Eopera%3Fg%2EaddEventListener%28%22DOMContentLoaded%22%2CQ%2C%211%29%3AD%28%22msie%22%29%3Fh%2Ewrite%28%22%3Cscript%20defer%20onreadystatechange%3D%27google%2Eloader%2EdomReady%28%29%27%20src%3D%2F%2F%3A%3E%5Cx3c%2Fscript%3E%22%29%3A%28D%28%22safari%22%29%7C%7CD%28%22konqueror%22%29%29%26%26g%5Br%5D%28S%2C10%29%29%2CO%5Bt%5D%28a%29%29%3AP%28g%2C%22load%22%2Ca%29%7D%3BK%28%22google%2EsetOnLoadCallback%22%2Cgoogle%2ET%29%3B%0Afunction%20P%28a%2Cb%2Cc%29%7Bif%28a%2EaddEventListener%29a%2EaddEventListener%28b%2Cc%2C%211%29%3Belse%20if%28a%2EattachEvent%29a%2EattachEvent%28%22on%22%2Bb%2Cc%29%3Belse%7Bvar%20e%3Da%5B%22on%22%2Bb%5D%3Ba%5B%22on%22%2Bb%5D%3Dnull%21%3De%3Faa%28%5Bc%2Ce%5D%29%3Ac%7D%7Dfunction%20aa%28a%29%7Breturn%20function%28%29%7Bfor%28var%20b%3D0%3Bb%3Ca%5Bx%5D%3Bb%2B%2B%29a%5Bb%5D%28%29%7D%7Dvar%20O%3D%5B%5D%3Bgoogle%5Bz%5D%2EP%3Dfunction%28%29%7Bvar%20a%3Dg%2Eevent%2EsrcElement%3B%22complete%22%3D%3Da%2EreadyState%26%26%28a%2Eonreadystatechange%3Dnull%2Ca%2EparentNode%2EremoveChild%28a%29%2CQ%28%29%29%7D%3BK%28%22google%2Eloader%2EdomReady%22%2Cgoogle%5Bz%5D%2EP%29%3Bvar%20ba%3D%7Bloaded%3A%210%2Ccomplete%3A%210%7D%3Bfunction%20S%28%29%7Bba%5Bh%2EreadyState%5D%3FQ%28%29%3A0%3CO%5Bx%5D%26%26g%5Br%5D%28S%2C10%29%7D%0Afunction%20Q%28%29%7Bfor%28var%20a%3D0%3Ba%3CO%5Bx%5D%3Ba%2B%2B%29O%5Ba%5D%28%29%3BO%2Elength%3D0%7Dgoogle%5Bz%5D%2Ed%3Dfunction%28a%2Cb%2Cc%29%7Bif%28c%29%7Bvar%20e%3B%22script%22%3D%3Da%3F%28e%3Dh%2EcreateElement%28%22script%22%29%2Ce%2Etype%3D%22text%2Fjavascript%22%2Ce%2Esrc%3Db%29%3A%22css%22%3D%3Da%26%26%28e%3Dh%2EcreateElement%28%22link%22%29%2Ce%2Etype%3D%22text%2Fcss%22%2Ce%2Ehref%3Db%2Ce%2Erel%3D%22stylesheet%22%29%3B%28a%3Dh%2EgetElementsByTagName%28%22head%22%29%5B0%5D%29%7C%7C%28a%3Dh%2Ebody%2EparentNode%2EappendChild%28h%2EcreateElement%28%22head%22%29%29%29%3Ba%2EappendChild%28e%29%7Delse%22script%22%3D%3Da%3Fh%2Ewrite%28%27%3Cscript%20src%3D%22%27%2Bb%2B%27%22%20type%3D%22text%2Fjavascript%22%3E%5Cx3c%2Fscript%3E%27%29%3A%22css%22%3D%3Da%26%26h%2Ewrite%28%27%3Clink%20href%3D%22%27%2Bb%2B%27%22%20type%3D%22text%2Fcss%22%20rel%3D%22stylesheet%22%3E%3C%2Flink%3E%27%29%7D%3B%0AK%28%22google%2Eloader%2EwriteLoadTag%22%2Cgoogle%5Bz%5D%2Ed%29%3Bgoogle%5Bz%5D%2EQ%3Dfunction%28a%29%7BN%3Da%7D%3BK%28%22google%2Eloader%2Erfm%22%2Cgoogle%5Bz%5D%2EQ%29%3Bgoogle%5Bz%5D%2ES%3Dfunction%28a%29%7Bfor%28var%20b%20in%20a%29%22string%22%3D%3Dtypeof%20b%26%26b%26%26%22%3A%22%3D%3Db%5Bn%5D%280%29%26%26%21M%5Bb%5D%26%26%28M%5Bb%5D%3Dnew%20T%28b%5BA%5D%281%29%2Ca%5Bb%5D%29%29%7D%3BK%28%22google%2Eloader%2Erpl%22%2Cgoogle%5Bz%5D%2ES%29%3Bgoogle%5Bz%5D%2ER%3Dfunction%28a%29%7Bif%28%28a%3Da%2Especs%29%26%26a%5Bx%5D%29for%28var%20b%3D0%3Bb%3Ca%5Bx%5D%3B%2B%2Bb%29%7Bvar%20c%3Da%5Bb%5D%3B%22string%22%3D%3Dtypeof%20c%3FM%5B%22%3A%22%2Bc%5D%3Dnew%20U%28c%29%3A%28c%3Dnew%20V%28c%5Bw%5D%2Cc%2EbaseSpec%2Cc%2EcustomSpecs%29%2CM%5B%22%3A%22%2Bc%5Bw%5D%5D%3Dc%29%7D%7D%3BK%28%22google%2Eloader%2Erm%22%2Cgoogle%5Bz%5D%2ER%29%3Bgoogle%5Bz%5D%2Eloaded%3Dfunction%28a%29%7BM%5B%22%3A%22%2Ba%2Emodule%5D%2El%28a%29%7D%3B%0AK%28%22google%2Eloader%2Eloaded%22%2Cgoogle%5Bz%5D%2Eloaded%29%3Bgoogle%5Bz%5D%2EO%3Dfunction%28%29%7Breturn%22qid%3D%22%2B%28%28new%20Date%29%5Bq%5D%28%29%2EtoString%2816%29%2BMath%2Efloor%281E7%2AMath%2Erandom%28%29%29%2EtoString%2816%29%29%7D%3BK%28%22google%2Eloader%2EcreateGuidArg%5F%22%2Cgoogle%5Bz%5D%2EO%29%3BI%28%22google%5FexportSymbol%22%2CI%29%3BI%28%22google%5FexportProperty%22%2CJ%29%3Bgoogle%5Bz%5D%2Ea%3D%7B%7D%3BK%28%22google%2Eloader%2Ethemes%22%2Cgoogle%5Bz%5D%2Ea%29%3Bgoogle%5Bz%5D%2Ea%2EI%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fbubblegum%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22BUBBLEGUM%22%2Cgoogle%5Bz%5D%2Ea%2EI%29%3Bgoogle%5Bz%5D%2Ea%2EK%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fgreensky%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22GREENSKY%22%2Cgoogle%5Bz%5D%2Ea%2EK%29%3B%0Agoogle%5Bz%5D%2Ea%2EJ%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fespresso%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22ESPRESSO%22%2Cgoogle%5Bz%5D%2Ea%2EJ%29%3Bgoogle%5Bz%5D%2Ea%2EM%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fshiny%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22SHINY%22%2Cgoogle%5Bz%5D%2Ea%2EM%29%3Bgoogle%5Bz%5D%2Ea%2EL%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fminimalist%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22MINIMALIST%22%2Cgoogle%5Bz%5D%2Ea%2EL%29%3Bgoogle%5Bz%5D%2Ea%2EN%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fv2%2Fdefault%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22V2%5FDEFAULT%22%2Cgoogle%5Bz%5D%2Ea%2EN%29%3Bfunction%20U%28a%29%7Bthis%2Eb%3Da%3Bthis%2Eo%3D%5B%5D%3Bthis%2En%3D%7B%7D%3Bthis%2Ee%3D%7B%7D%3Bthis%2Ef%3D%7B%7D%3Bthis%2Ej%3D%210%3Bthis%2Ec%3D%2D1%7D%0AU%5By%5D%2Eg%3Dfunction%28a%2Cb%29%7Bvar%20c%3D%22%22%3Bvoid%200%21%3Db%26%26%28void%200%21%3Db%2Elanguage%26%26%28c%2B%3D%22%26hl%3D%22%2Bd%28b%2Elanguage%29%29%2Cvoid%200%21%3Db%2Enocss%26%26%28c%2B%3D%22%26output%3D%22%2Bd%28%22nocss%3D%22%2Bb%2Enocss%29%29%2Cvoid%200%21%3Db%2Enooldnames%26%26%28c%2B%3D%22%26nooldnames%3D%22%2Bd%28b%2Enooldnames%29%29%2Cvoid%200%21%3Db%2Epackages%26%26%28c%2B%3D%22%26packages%3D%22%2Bd%28b%2Epackages%29%29%2Cnull%21%3Db%2Ecallback%26%26%28c%2B%3D%22%26async%3D2%22%29%2Cvoid%200%21%3Db%2Estyle%26%26%28c%2B%3D%22%26style%3D%22%2Bd%28b%2Estyle%29%29%2Cvoid%200%21%3Db%2Enoexp%26%26%28c%2B%3D%22%26noexp%3Dtrue%22%29%2Cvoid%200%21%3Db%2Eother%5Fparams%26%26%28c%2B%3D%22%26%22%2Bb%2Eother%5Fparams%29%29%3Bif%28%21this%2Ej%29%7Bgoogle%5Bthis%2Eb%5D%26%26google%5Bthis%2Eb%5D%2EJSHash%26%26%28c%2B%3D%22%26sig%3D%22%2Bd%28google%5Bthis%2Eb%5D%2EJSHash%29%29%3B%0Avar%20e%3D%5B%5D%2Cf%3Bfor%28f%20in%20this%2En%29%22%3A%22%3D%3Df%5Bn%5D%280%29%26%26e%5Bt%5D%28f%5BA%5D%281%29%29%3Bfor%28f%20in%20this%2Ee%29%22%3A%22%3D%3Df%5Bn%5D%280%29%26%26this%2Ee%5Bf%5D%26%26e%5Bt%5D%28f%5BA%5D%281%29%29%3Bc%2B%3D%22%26have%3D%22%2Bd%28e%5BB%5D%28%22%2C%22%29%29%7Dreturn%20google%5Bz%5D%5Bv%5D%2B%22%2F%3Ffile%3D%22%2Bthis%2Eb%2B%22%26v%3D%22%2Ba%2Bgoogle%5Bz%5D%2EAdditionalParams%2Bc%7D%3BU%5By%5D%2Et%3Dfunction%28a%29%7Bvar%20b%3Dnull%3Ba%26%26%28b%3Da%2Epackages%29%3Bvar%20c%3Dnull%3Bif%28b%29if%28%22string%22%3D%3Dtypeof%20b%29c%3D%5Ba%2Epackages%5D%3Belse%20if%28b%5Bx%5D%29for%28c%3D%5B%5D%2Ca%3D0%3Ba%3Cb%5Bx%5D%3Ba%2B%2B%29%22string%22%3D%3Dtypeof%20b%5Ba%5D%26%26c%5Bt%5D%28b%5Ba%5D%5Bm%5D%28%2F%5E%5Cs%2A%7C%5Cs%2A%24%2F%2C%22%22%29%5BC%5D%28%29%29%3Bc%7C%7C%28c%3D%5B%22default%22%5D%29%3Bb%3D%5B%5D%3Bfor%28a%3D0%3Ba%3Cc%5Bx%5D%3Ba%2B%2B%29this%2En%5B%22%3A%22%2Bc%5Ba%5D%5D%7C%7Cb%5Bt%5D%28c%5Ba%5D%29%3Breturn%20b%7D%3B%0Al%28U%5By%5D%2Cfunction%28a%2Cb%29%7Bvar%20c%3Dthis%2Et%28b%29%2Ce%3Db%26%26null%21%3Db%2Ecallback%3Bif%28e%29var%20f%3Dnew%20W%28b%2Ecallback%29%3Bfor%28var%20k%3D%5B%5D%2Cp%3Dc%5Bx%5D%2D1%3B0%3C%3Dp%3Bp%2D%2D%29%7Bvar%20s%3Dc%5Bp%5D%3Be%26%26f%2EB%28s%29%3Bif%28this%2Ee%5B%22%3A%22%2Bs%5D%29c%2Esplice%28p%2C1%29%2Ce%26%26this%2Ef%5B%22%3A%22%2Bs%5D%5Bt%5D%28f%29%3Belse%20k%5Bt%5D%28s%29%7Dif%28c%5Bx%5D%29%7Bb%26%26b%2Epackages%26%26%28b%2Epackages%3Dc%2Esort%28%29%5BB%5D%28%22%2C%22%29%29%3Bfor%28p%3D0%3Bp%3Ck%5Bx%5D%3Bp%2B%2B%29s%3Dk%5Bp%5D%2Cthis%2Ef%5B%22%3A%22%2Bs%5D%3D%5B%5D%2Ce%26%26this%2Ef%5B%22%3A%22%2Bs%5D%5Bt%5D%28f%29%3Bif%28b%7C%7Cnull%3D%3DN%5B%22%3A%22%2Bthis%2Eb%5D%7C%7Cnull%3D%3DN%5B%22%3A%22%2Bthis%2Eb%5D%2Eversions%5B%22%3A%22%2Ba%5D%7C%7Cgoogle%5Bz%5D%2EAdditionalParams%7C%7C%21this%2Ej%29b%26%26b%2Eautoloaded%7C%7Cgoogle%5Bz%5D%2Ed%28%22script%22%2Cthis%2Eg%28a%2Cb%29%2Ce%29%3Belse%7Bc%3DN%5B%22%3A%22%2Bthis%2Eb%5D%3B%0Agoogle%5Bthis%2Eb%5D%3Dgoogle%5Bthis%2Eb%5D%7C%7C%7B%7D%3Bfor%28var%20R%20in%20c%2Eproperties%29R%26%26%22%3A%22%3D%3DR%5Bn%5D%280%29%26%26%28google%5Bthis%2Eb%5D%5BR%5BA%5D%281%29%5D%3Dc%2Eproperties%5BR%5D%29%3Bgoogle%5Bz%5D%2Ed%28%22script%22%2Cgoogle%5Bz%5D%5Bv%5D%2Bc%2Epath%2Bc%2Ejs%2Ce%29%3Bc%2Ecss%26%26google%5Bz%5D%2Ed%28%22css%22%2Cgoogle%5Bz%5D%5Bv%5D%2Bc%2Epath%2Bc%2Ecss%2Ce%29%7Dthis%2Ej%26%26%28this%2Ej%3D%211%2Cthis%2Ec%3D%28new%20Date%29%5Bq%5D%28%29%2C1%21%3Dthis%2Ec%25100%26%26%28this%2Ec%3D%2D1%29%29%3Bfor%28p%3D0%3Bp%3Ck%5Bx%5D%3Bp%2B%2B%29s%3Dk%5Bp%5D%2Cthis%2Ee%5B%22%3A%22%2Bs%5D%3D%210%7D%7D%29%3B%0AU%5By%5D%2El%3Dfunction%28a%29%7B%2D1%21%3Dthis%2Ec%26%26%28X%28%22al%5F%22%2Bthis%2Eb%2C%22jl%2E%22%2B%28%28new%20Date%29%5Bq%5D%28%29%2Dthis%2Ec%29%2C%210%29%2Cthis%2Ec%3D%2D1%29%3Bthis%2Eo%3Dthis%2Eo%2Econcat%28a%2Ecomponents%29%3Bgoogle%5Bz%5D%5Bthis%2Eb%5D%7C%7C%28google%5Bz%5D%5Bthis%2Eb%5D%3D%7B%7D%29%3Bgoogle%5Bz%5D%5Bthis%2Eb%5D%2Epackages%3Dthis%2Eo%2Eslice%280%29%3Bfor%28var%20b%3D0%3Bb%3Ca%2Ecomponents%5Bx%5D%3Bb%2B%2B%29%7Bthis%2En%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%3D%210%3Bthis%2Ee%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%3D%211%3Bvar%20c%3Dthis%2Ef%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%3Bif%28c%29%7Bfor%28var%20e%3D0%3Be%3Cc%5Bx%5D%3Be%2B%2B%29c%5Be%5D%2EC%28a%2Ecomponents%5Bb%5D%29%3Bdelete%20this%2Ef%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%7D%7D%7D%3BU%5By%5D%2Em%3Dfunction%28a%2Cb%29%7Breturn%200%3D%3Dthis%2Et%28b%29%5Bx%5D%7D%3BU%5By%5D%2Es%3Dfunction%28%29%7Breturn%210%7D%3B%0Afunction%20W%28a%29%7Bthis%2EF%3Da%3Bthis%2Eq%3D%7B%7D%3Bthis%2Er%3D0%7DW%5By%5D%2EB%3Dfunction%28a%29%7Bthis%2Er%2B%2B%3Bthis%2Eq%5B%22%3A%22%2Ba%5D%3D%210%7D%3BW%5By%5D%2EC%3Dfunction%28a%29%7Bthis%2Eq%5B%22%3A%22%2Ba%5D%26%26%28this%2Eq%5B%22%3A%22%2Ba%5D%3D%211%2Cthis%2Er%2D%2D%2C0%3D%3Dthis%2Er%26%26g%5Br%5D%28this%2EF%2C0%29%29%7D%3Bfunction%20V%28a%2Cb%2Cc%29%7Bthis%2Ename%3Da%3Bthis%2ED%3Db%3Bthis%2Ep%3Dc%3Bthis%2Eu%3Dthis%2Eh%3D%211%3Bthis%2Ek%3D%5B%5D%3Bgoogle%5Bz%5D%2Ev%5Bthis%5Bw%5D%5D%3DG%28this%2El%2Cthis%29%7DF%28V%2CU%29%3Bl%28V%5By%5D%2Cfunction%28a%2Cb%29%7Bvar%20c%3Db%26%26null%21%3Db%2Ecallback%3Bc%3F%28this%2Ek%5Bt%5D%28b%2Ecallback%29%2Cb%2Ecallback%3D%22google%2Eloader%2Ecallbacks%2E%22%2Bthis%5Bw%5D%29%3Athis%2Eh%3D%210%3Bb%26%26b%2Eautoloaded%7C%7Cgoogle%5Bz%5D%2Ed%28%22script%22%2Cthis%2Eg%28a%2Cb%29%2Cc%29%7D%29%3BV%5By%5D%2Em%3Dfunction%28a%2Cb%29%7Breturn%20b%26%26null%21%3Db%2Ecallback%3Fthis%2Eu%3Athis%2Eh%7D%3BV%5By%5D%2El%3Dfunction%28%29%7Bthis%2Eu%3D%210%3Bfor%28var%20a%3D0%3Ba%3Cthis%2Ek%5Bx%5D%3Ba%2B%2B%29g%5Br%5D%28this%2Ek%5Ba%5D%2C0%29%3Bthis%2Ek%3D%5B%5D%7D%3B%0Avar%20Y%3Dfunction%28a%2Cb%29%7Breturn%20a%2Estring%3Fd%28a%2Estring%29%2B%22%3D%22%2Bd%28b%29%3Aa%2Eregex%3Fb%5Bm%5D%28%2F%28%5E%2E%2A%24%29%2F%2Ca%2Eregex%29%3A%22%22%7D%3BV%5By%5D%2Eg%3Dfunction%28a%2Cb%29%7Breturn%20this%2EG%28this%2Ew%28a%29%2Ca%2Cb%29%7D%3B%0AV%5By%5D%2EG%3Dfunction%28a%2Cb%2Cc%29%7Bvar%20e%3D%22%22%3Ba%2Ekey%26%26%28e%2B%3D%22%26%22%2BY%28a%2Ekey%2Cgoogle%5Bz%5D%2EApiKey%29%29%3Ba%2Eversion%26%26%28e%2B%3D%22%26%22%2BY%28a%2Eversion%2Cb%29%29%3Bb%3Dgoogle%5Bz%5D%2ESecure%26%26a%2Essl%3Fa%2Essl%3Aa%2Euri%3Bif%28null%21%3Dc%29for%28var%20f%20in%20c%29a%2Eparams%5Bf%5D%3Fe%2B%3D%22%26%22%2BY%28a%2Eparams%5Bf%5D%2Cc%5Bf%5D%29%3A%22other%5Fparams%22%3D%3Df%3Fe%2B%3D%22%26%22%2Bc%5Bf%5D%3A%22base%5Fdomain%22%3D%3Df%26%26%28b%3D%22http%3A%2F%2F%22%2Bc%5Bf%5D%2Ba%2Euri%5BA%5D%28a%2Euri%5Bu%5D%28%22%2F%22%2C7%29%29%29%3Bgoogle%5Bthis%5Bw%5D%5D%3D%7B%7D%3B%2D1%3D%3Db%5Bu%5D%28%22%3F%22%29%26%26e%26%26%28e%3D%22%3F%22%2Be%5BA%5D%281%29%29%3Breturn%20b%2Be%7D%3BV%5By%5D%2Es%3Dfunction%28a%29%7Breturn%20this%2Ew%28a%29%2Edeferred%7D%3BV%5By%5D%2Ew%3Dfunction%28a%29%7Bif%28this%2Ep%29for%28var%20b%3D0%3Bb%3Cthis%2Ep%5Bx%5D%3B%2B%2Bb%29%7Bvar%20c%3Dthis%2Ep%5Bb%5D%3Bif%28%28new%20RegExp%28c%2Epattern%29%29%2Etest%28a%29%29return%20c%7Dreturn%20this%2ED%7D%3Bfunction%20T%28a%2Cb%29%7Bthis%2Eb%3Da%3Bthis%2Ei%3Db%3Bthis%2Eh%3D%211%7DF%28T%2CU%29%3Bl%28T%5By%5D%2Cfunction%28a%2Cb%29%7Bthis%2Eh%3D%210%3Bgoogle%5Bz%5D%2Ed%28%22script%22%2Cthis%2Eg%28a%2Cb%29%2C%211%29%7D%29%3BT%5By%5D%2Em%3Dfunction%28%29%7Breturn%20this%2Eh%7D%3BT%5By%5D%2El%3Dfunction%28%29%7B%7D%3BT%5By%5D%2Eg%3Dfunction%28a%2Cb%29%7Bif%28%21this%2Ei%2Eversions%5B%22%3A%22%2Ba%5D%29%7Bif%28this%2Ei%2Ealiases%29%7Bvar%20c%3Dthis%2Ei%2Ealiases%5B%22%3A%22%2Ba%5D%3Bc%26%26%28a%3Dc%29%7Dif%28%21this%2Ei%2Eversions%5B%22%3A%22%2Ba%5D%29throw%20H%28%22Module%3A%20%27%22%2Bthis%2Eb%2B%22%27%20with%20version%20%27%22%2Ba%2B%22%27%20not%20found%21%22%29%3B%7Dreturn%20google%5Bz%5D%2EGoogleApisBase%2B%22%2Flibs%2F%22%2Bthis%2Eb%2B%22%2F%22%2Ba%2B%22%2F%22%2Bthis%2Ei%2Eversions%5B%22%3A%22%2Ba%5D%5Bb%26%26b%2Euncompressed%3F%22uncompressed%22%3A%22compressed%22%5D%7D%3B%0AT%5By%5D%2Es%3Dfunction%28%29%7Breturn%211%7D%3Bvar%20ca%3D%211%2CZ%3D%5B%5D%2Cda%3D%28new%20Date%29%5Bq%5D%28%29%2Cfa%3Dfunction%28%29%7Bca%7C%7C%28P%28g%2C%22unload%22%2Cea%29%2Cca%3D%210%29%7D%2Cga%3Dfunction%28a%2Cb%29%7Bfa%28%29%3Bif%28%21%28google%5Bz%5D%2ESecure%7C%7Cgoogle%5Bz%5D%2EOptions%26%26%211%21%3D%3Dgoogle%5Bz%5D%2EOptions%2Ecsi%29%29%7Bfor%28var%20c%3D0%3Bc%3Ca%5Bx%5D%3Bc%2B%2B%29a%5Bc%5D%3Dd%28a%5Bc%5D%5BC%5D%28%29%5Bm%5D%28%2F%5B%5Ea%2Dz0%2D9%5F%2E%5D%2B%2Fg%2C%22%5F%22%29%29%3Bfor%28c%3D0%3Bc%3Cb%5Bx%5D%3Bc%2B%2B%29b%5Bc%5D%3Dd%28b%5Bc%5D%5BC%5D%28%29%5Bm%5D%28%2F%5B%5Ea%2Dz0%2D9%5F%2E%5D%2B%2Fg%2C%22%5F%22%29%29%3Bg%5Br%5D%28G%28%24%2Cnull%2C%22%2F%2Fgg%2Egoogle%2Ecom%2Fcsi%3Fs%3Duds%26v%3D2%26action%3D%22%2Ba%5BB%5D%28%22%2C%22%29%2B%22%26it%3D%22%2Bb%5BB%5D%28%22%2C%22%29%29%2C1E4%29%7D%7D%2CX%3Dfunction%28a%2Cb%2Cc%29%7Bc%3Fga%28%5Ba%5D%2C%5Bb%5D%29%3A%28fa%28%29%2CZ%5Bt%5D%28%22r%22%2BZ%5Bx%5D%2B%22%3D%22%2Bd%28a%2B%28b%3F%22%7C%22%2Bb%3A%22%22%29%29%29%2Cg%5Br%5D%28ea%2C5%3CZ%5Bx%5D%3F0%3A15E3%29%29%7D%2Cea%3Dfunction%28%29%7Bif%28Z%5Bx%5D%29%7Bvar%20a%3D%0Agoogle%5Bz%5D%5Bv%5D%3B0%3D%3Da%5Bu%5D%28%22http%3A%22%29%26%26%28a%3Da%5Bm%5D%28%2F%5Ehttp%3A%2F%2C%22https%3A%22%29%29%3B%24%28a%2B%22%2Fstats%3F%22%2BZ%5BB%5D%28%22%26%22%29%2B%22%26nc%3D%22%2B%28new%20Date%29%5Bq%5D%28%29%2B%22%5F%22%2B%28%28new%20Date%29%5Bq%5D%28%29%2Dda%29%29%3BZ%2Elength%3D0%7D%7D%2C%24%3Dfunction%28a%29%7Bvar%20b%3Dnew%20Image%2Cc%3D%24%2EH%2B%2B%3B%24%2EA%5Bc%5D%3Db%3Bb%2Eonload%3Db%2Eonerror%3Dfunction%28%29%7Bdelete%20%24%2EA%5Bc%5D%7D%3Bb%2Esrc%3Da%3Bb%3Dnull%7D%3B%24%2EA%3D%7B%7D%3B%24%2EH%3D0%3BI%28%22google%2Eloader%2ErecordCsiStat%22%2Cga%29%3BI%28%22google%2Eloader%2ErecordStat%22%2CX%29%3BI%28%22google%2Eloader%2EcreateImageForLogging%22%2C%24%29%3B%0A%0A%7D%29%20%28%29%3Bgoogle%2Eloader%2Erm%28%7B%22specs%22%3A%5B%7B%22name%22%3A%22books%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fbooks%2Egoogle%2Ecom%2Fbooks%2Fapi%2Ejs%22%2C%22ssl%22%3A%22https%3A%2F%2Fencrypted%2Egoogle%2Ecom%2Fbooks%2Fapi%2Ejs%22%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22string%22%3A%22callback%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%7D%7D%2C%22feeds%22%2C%7B%22name%22%3A%22friendconnect%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fwww%2Egoogle%2Ecom%2Ffriendconnect%2Fscript%2Ffriendconnect%2Ejs%22%2C%22ssl%22%3A%22https%3A%2F%2Fwww%2Egoogle%2Ecom%2Ffriendconnect%2Fscript%2Ffriendconnect%2Ejs%22%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Afalse%2C%22params%22%3A%7B%7D%7D%7D%2C%22spreadsheets%22%2C%22identitytoolkit%22%2C%22gdata%22%2C%22ima%22%2C%22visualization%22%2C%7B%22name%22%3A%22sharing%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fwww%2Egoogle%2Ecom%2Fs2%2Fsharing%2Fjs%22%2C%22ssl%22%3Anull%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Afalse%2C%22params%22%3A%7B%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%7D%7D%2C%7B%22name%22%3A%22maps%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fmaps%2Egoogle%2Ecom%2Fmaps%3Ffile%5Cu003dgoogleapi%22%2C%22ssl%22%3A%22https%3A%2F%2Fmaps%2Dapi%2Dssl%2Egoogle%2Ecom%2Fmaps%3Ffile%5Cu003dgoogleapi%22%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22regex%22%3A%22callback%5Cu003d%241%5Cu0026async%5Cu003d2%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%7D%2C%22customSpecs%22%3A%5B%7B%22uri%22%3A%22http%3A%2F%2Fmaps%2Egoogleapis%2Ecom%2Fmaps%2Fapi%2Fjs%22%2C%22ssl%22%3A%22https%3A%2F%2Fmaps%2Egoogleapis%2Ecom%2Fmaps%2Fapi%2Fjs%22%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22string%22%3A%22callback%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%2C%22pattern%22%3A%22%5E%283%7C3%2E%2E%2A%29%24%22%7D%5D%7D%2C%22search%22%2C%22annotations%5Fv2%22%2C%22payments%22%2C%22wave%22%2C%22orkut%22%2C%7B%22name%22%3A%22annotations%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fwww%2Egoogle%2Ecom%2Freviews%2Fscripts%2Fannotations%5Fbootstrap%2Ejs%22%2C%22ssl%22%3Anull%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22string%22%3A%22callback%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%2C%22country%22%3A%7B%22string%22%3A%22gl%22%7D%7D%7D%7D%2C%22language%22%2C%22earth%22%2C%22picker%22%2C%22ads%22%2C%22elements%22%5D%7D%29%3B%0Agoogle%2Eloader%2Erfm%28%7B%22%3Asearch%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fsearch%2F1%2E0%2F23952f7483f1bca4119a89c020d13def%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22css%22%3A%22default%2Ben%2Ecss%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%2223952f7483f1bca4119a89c020d13def%22%2C%22%3ANoOldNames%22%3Afalse%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Alanguage%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Flanguage%2F1%2E0%2F7b15944f20c0d2d7b2d2d87406a8916b%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%227b15944f20c0d2d7b2d2d87406a8916b%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Afeeds%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Ffeeds%2F1%2E0%2F482f2817cdf8982edf2e5669f9e3a627%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22css%22%3A%22default%2Ben%2Ecss%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%22482f2817cdf8982edf2e5669f9e3a627%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Aspreadsheets%22%3A%7B%22versions%22%3A%7B%22%3A0%22%3A%221%22%2C%22%3A0%2E4%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fspreadsheets%2F0%2E4%2F87ff7219e9f8a8164006cbf28d5e911a%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%2287ff7219e9f8a8164006cbf28d5e911a%22%2C%22%3AVersion%22%3A%220%2E4%22%7D%7D%2C%22%3Aima%22%3A%7B%22versions%22%3A%7B%22%3A3%22%3A%221%22%2C%22%3A3%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fima%2F3%2E0%2F28a914332232c9a8ac0ae8da68b1006e%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%2228a914332232c9a8ac0ae8da68b1006e%22%2C%22%3AVersion%22%3A%223%2E0%22%7D%7D%2C%22%3Awave%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fwave%2F1%2E0%2F3b6f7573ff78da6602dda5e09c9025bf%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%223b6f7573ff78da6602dda5e09c9025bf%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Aannotations%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fannotations%2F1%2E0%2Fee29f1a32c343fea662c6e1b58ec6d0d%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%22ee29f1a32c343fea662c6e1b58ec6d0d%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Aearth%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fearth%2F1%2E0%2Fdb22e5693e0a8de1f62f3536f5a8d7d3%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%22db22e5693e0a8de1f62f3536f5a8d7d3%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Apicker%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fpicker%2F1%2E0%2F1c635e91b9d0c082c660a42091913907%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22css%22%3A%22default%2Ecss%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%221c635e91b9d0c082c660a42091913907%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%7D%29%3B%0Agoogle%2Eloader%2Erpl%28%7B%22%3Ascriptaculous%22%3A%7B%22versions%22%3A%7B%22%3A1%2E8%2E3%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%2C%22%3A1%2E9%2E0%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%2C%22%3A1%2E8%2E2%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%2C%22%3A1%2E8%2E1%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E8%22%3A%221%2E8%2E3%22%2C%22%3A1%22%3A%221%2E9%2E0%22%2C%22%3A1%2E9%22%3A%221%2E9%2E0%22%7D%7D%2C%22%3Ayui%22%3A%7B%22versions%22%3A%7B%22%3A2%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E9%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E8%2E0r4%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E8%2E2r1%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E8%2E1%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A3%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyui%2Fyui%2Ejs%22%2C%22compressed%22%3A%22build%2Fyui%2Fyui%2Dmin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A3%22%3A%223%2E3%2E0%22%2C%22%3A2%22%3A%222%2E9%2E0%22%2C%22%3A2%2E7%22%3A%222%2E7%2E0%22%2C%22%3A2%2E8%2E2%22%3A%222%2E8%2E2r1%22%2C%22%3A2%2E6%22%3A%222%2E6%2E0%22%2C%22%3A2%2E9%22%3A%222%2E9%2E0%22%2C%22%3A2%2E8%22%3A%222%2E8%2E2r1%22%2C%22%3A2%2E8%2E0%22%3A%222%2E8%2E0r4%22%2C%22%3A3%2E3%22%3A%223%2E3%2E0%22%7D%7D%2C%22%3Aswfobject%22%3A%7B%22versions%22%3A%7B%22%3A2%2E1%22%3A%7B%22uncompressed%22%3A%22swfobject%5Fsrc%2Ejs%22%2C%22compressed%22%3A%22swfobject%2Ejs%22%7D%2C%22%3A2%2E2%22%3A%7B%22uncompressed%22%3A%22swfobject%5Fsrc%2Ejs%22%2C%22compressed%22%3A%22swfobject%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A2%22%3A%222%2E2%22%7D%7D%2C%22%3Awebfont%22%3A%7B%22versions%22%3A%7B%22%3A1%2E0%2E28%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E27%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E29%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E12%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E13%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E14%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E15%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E10%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E11%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E2%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E1%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E6%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E19%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E5%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E18%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E4%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E17%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E16%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E3%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E9%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E21%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E22%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E25%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E26%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E23%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E24%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%22%3A%221%2E0%2E29%22%2C%22%3A1%2E0%22%3A%221%2E0%2E29%22%7D%7D%2C%22%3Aext%2Dcore%22%3A%7B%22versions%22%3A%7B%22%3A3%2E1%2E0%22%3A%7B%22uncompressed%22%3A%22ext%2Dcore%2Ddebug%2Ejs%22%2C%22compressed%22%3A%22ext%2Dcore%2Ejs%22%7D%2C%22%3A3%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22ext%2Dcore%2Ddebug%2Ejs%22%2C%22compressed%22%3A%22ext%2Dcore%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A3%22%3A%223%2E1%2E0%22%2C%22%3A3%2E0%22%3A%223%2E0%2E0%22%2C%22%3A3%2E1%22%3A%223%2E1%2E0%22%7D%7D%2C%22%3Amootools%22%3A%7B%22versions%22%3A%7B%22%3A1%2E3%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E1%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E3%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E1%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E3%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E4%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E5%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E4%2E0%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E4%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E4%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%22%3A%221%2E1%2E2%22%2C%22%3A1%2E11%22%3A%221%2E1%2E1%22%2C%22%3A1%2E4%22%3A%221%2E4%2E2%22%2C%22%3A1%2E3%22%3A%221%2E3%2E2%22%2C%22%3A1%2E2%22%3A%221%2E2%2E5%22%2C%22%3A1%2E1%22%3A%221%2E1%2E2%22%7D%7D%2C%22%3Ajqueryui%22%3A%7B%22versions%22%3A%7B%22%3A1%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E9%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E15%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E14%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E7%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E13%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E8%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E12%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E5%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E11%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E10%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E6%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E4%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E17%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E16%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E8%22%3A%221%2E8%2E17%22%2C%22%3A1%2E7%22%3A%221%2E7%2E3%22%2C%22%3A1%2E6%22%3A%221%2E6%2E0%22%2C%22%3A1%22%3A%221%2E8%2E17%22%2C%22%3A1%2E5%22%3A%221%2E5%2E3%22%2C%22%3A1%2E8%2E3%22%3A%221%2E8%2E4%22%7D%7D%2C%22%3Achrome%2Dframe%22%3A%7B%22versions%22%3A%7B%22%3A1%2E0%2E2%22%3A%7B%22uncompressed%22%3A%22CFInstall%2Ejs%22%2C%22compressed%22%3A%22CFInstall%2Emin%2Ejs%22%7D%2C%22%3A1%2E0%2E1%22%3A%7B%22uncompressed%22%3A%22CFInstall%2Ejs%22%2C%22compressed%22%3A%22CFInstall%2Emin%2Ejs%22%7D%2C%22%3A1%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22CFInstall%2Ejs%22%2C%22compressed%22%3A%22CFInstall%2Emin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%22%3A%221%2E0%2E2%22%2C%22%3A1%2E0%22%3A%221%2E0%2E2%22%7D%7D%2C%22%3Ajquery%22%3A%7B%22versions%22%3A%7B%22%3A1%2E6%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E3%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E4%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E3%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E2%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E2%2E6%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E4%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E7%22%3A%221%2E7%2E1%22%2C%22%3A1%2E6%22%3A%221%2E6%2E4%22%2C%22%3A1%22%3A%221%2E7%2E1%22%2C%22%3A1%2E5%22%3A%221%2E5%2E2%22%2C%22%3A1%2E4%22%3A%221%2E4%2E4%22%2C%22%3A1%2E3%22%3A%221%2E3%2E2%22%2C%22%3A1%2E2%22%3A%221%2E2%2E6%22%7D%7D%2C%22%3Aprototype%22%3A%7B%22versions%22%3A%7B%22%3A1%2E7%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%2C%22%3A1%2E6%2E0%2E2%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%2C%22%3A1%2E6%2E1%2E0%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%2C%22%3A1%2E6%2E0%2E3%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E7%22%3A%221%2E7%2E0%2E0%22%2C%22%3A1%2E6%2E1%22%3A%221%2E6%2E1%2E0%22%2C%22%3A1%22%3A%221%2E7%2E0%2E0%22%2C%22%3A1%2E6%22%3A%221%2E6%2E1%2E0%22%2C%22%3A1%2E7%2E0%22%3A%221%2E7%2E0%2E0%22%2C%22%3A1%2E6%2E0%22%3A%221%2E6%2E0%2E3%22%7D%7D%2C%22%3Adojo%22%3A%7B%22versions%22%3A%7B%22%3A1%2E3%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E6%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E1%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E3%2E2%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E2%2E3%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E7%2E2%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Ejs%22%7D%2C%22%3A1%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Ejs%22%7D%2C%22%3A1%2E7%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Ejs%22%7D%2C%22%3A1%2E4%2E3%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E5%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E5%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E2%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E4%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E4%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E7%22%3A%221%2E7%2E2%22%2C%22%3A1%22%3A%221%2E6%2E1%22%2C%22%3A1%2E6%22%3A%221%2E6%2E1%22%2C%22%3A1%2E5%22%3A%221%2E5%2E1%22%2C%22%3A1%2E4%22%3A%221%2E4%2E3%22%2C%22%3A1%2E3%22%3A%221%2E3%2E2%22%2C%22%3A1%2E2%22%3A%221%2E2%2E3%22%2C%22%3A1%2E1%22%3A%221%2E1%2E1%22%7D%7D%7D%29%3B%0A%7D%0AdisplayChartBarChartID3a35ada5e57%28%29%3B" type="text/javascript"></script>
+<!-- divChart -->
+<div id="BarChartID3a35ada5e57" style="width: 500; height: automatic;">
+
+</div>
+<div>
+<span>Data: data • Chart ID: <a href="Chart_BarChartID3a35ada5e57.html">BarChartID3a35ada5e57</a> • <a href="https://github.com/mages/googleVis">googleVis-0.5.6</a></span><br /> <!-- htmlFooter --> <span> R version 3.1.2 (2014-10-31) • <a href="https://developers.google.com/terms/">Google Terms of Use</a> • <a href="https://google-developers.appspot.com/chart/interactive/docs/gallery/barchart">Documentation and Data Policy</a> </span>
+</div>
+</body>
+</html>
+</div>
+<div class="section level4">
+<h4>行政區的交易數</h4>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">group_by</span>(df, <span class="st">`</span><span class="dt">行政區(DISTRICT)</span><span class="st">`</span>) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">length</span>(<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>)) %&gt;%
+<span class="st">  </span><span class="kw">gvisBarChart</span>(<span class="dt">yvar =</span> <span class="st">&quot;count&quot;</span>)</code></pre>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>
+BarChartID3a357f19fbc6
+</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<style type="text/css">
+body {
+  color: #444444;
+  font-family: Arial,Helvetica,sans-serif;
+  font-size: 75%;
+  }
+  a {
+  color: #4D87C7;
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+<p><!-- BarChart generated in R 3.1.2 by googleVis 0.5.6 package --> <!-- Sat May 23 15:06:26 2015 --></p>
+<!-- jsHeader -->
+<script type="text/javascript">
+ 
+// jsData 
+function gvisDataBarChartID3a357f19fbc6 () {
+var data = new google.visualization.DataTable();
+var datajson =
+[
+ [
+ "內湖區",
+109 
+],
+[
+ "松山區",
+49 
+],
+[
+ "大安區",
+112 
+],
+[
+ "中山區",
+201 
+],
+[
+ "文山區",
+54 
+],
+[
+ "士林區",
+107 
+],
+[
+ "中正區",
+15 
+],
+[
+ "北投區",
+76 
+],
+[
+ "信義區",
+78 
+],
+[
+ "南港區",
+30 
+],
+[
+ "大同區",
+34 
+],
+[
+ "萬華區",
+27 
+] 
+];
+data.addColumn('string','行政區(DISTRICT)');
+data.addColumn('number','count');
+data.addRows(datajson);
+return(data);
+}
+ 
+// jsDrawChart
+function drawChartBarChartID3a357f19fbc6() {
+var data = gvisDataBarChartID3a357f19fbc6();
+var options = {};
+options["allowHtml"] = true;
+
+    var chart = new google.visualization.BarChart(
+    document.getElementById('BarChartID3a357f19fbc6')
+    );
+    chart.draw(data,options);
+    
+
+}
+  
+ 
+// jsDisplayChart
+(function() {
+var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+var chartid = "corechart";
+  
+// Manually see if chartid is in pkgs (not all browsers support Array.indexOf)
+var i, newPackage = true;
+for (i = 0; newPackage && i < pkgs.length; i++) {
+if (pkgs[i] === chartid)
+newPackage = false;
+}
+if (newPackage)
+  pkgs.push(chartid);
+  
+// Add the drawChart function to the global list of callbacks
+callbacks.push(drawChartBarChartID3a357f19fbc6);
+})();
+function displayChartBarChartID3a357f19fbc6() {
+  var pkgs = window.__gvisPackages = window.__gvisPackages || [];
+  var callbacks = window.__gvisCallbacks = window.__gvisCallbacks || [];
+  window.clearTimeout(window.__gvisLoad);
+  // The timeout is set to 100 because otherwise the container div we are
+  // targeting might not be part of the document yet
+  window.__gvisLoad = setTimeout(function() {
+  var pkgCount = pkgs.length;
+  google.load("visualization", "1", { packages:pkgs, callback: function() {
+  if (pkgCount != pkgs.length) {
+  // Race condition where another setTimeout call snuck in after us; if
+  // that call added a package, we must not shift its callback
+  return;
+}
+while (callbacks.length > 0)
+callbacks.shift()();
+} });
+}, 100);
+}
+ 
+// jsFooter
+</script>
+<!-- jsChart -->
+<script src="data:text/javascript; charset=utf-8,if%28%21window%5B%27googleLT%5F%27%5D%29%7Bwindow%5B%27googleLT%5F%27%5D%3D%28new%20Date%28%29%29%2EgetTime%28%29%3B%7Dif%20%28%21window%5B%27google%27%5D%29%20%7B%0Awindow%5B%27google%27%5D%20%3D%20%7B%7D%3B%0A%7D%0Aif%20%28%21window%5B%27google%27%5D%5B%27loader%27%5D%29%20%7B%0Awindow%5B%27google%27%5D%5B%27loader%27%5D%20%3D%20%7B%7D%3B%0Agoogle%2Eloader%2EServiceBase%20%3D%20%27https%3A%2F%2Fwww%2Egoogle%2Ecom%2Fuds%27%3B%0Agoogle%2Eloader%2EGoogleApisBase%20%3D%20%27https%3A%2F%2Fajax%2Egoogleapis%2Ecom%2Fajax%27%3B%0Agoogle%2Eloader%2EApiKey%20%3D%20%27notsupplied%27%3B%0Agoogle%2Eloader%2EKeyVerified%20%3D%20true%3B%0Agoogle%2Eloader%2ELoadFailure%20%3D%20false%3B%0Agoogle%2Eloader%2ESecure%20%3D%20true%3B%0Agoogle%2Eloader%2EGoogleLocale%20%3D%20%27www%2Egoogle%2Ecom%27%3B%0Agoogle%2Eloader%2EClientLocation%20%3D%20null%3B%0Agoogle%2Eloader%2EAdditionalParams%20%3D%20%27%27%3B%0A%28function%28%29%20%7Bvar%20d%3DencodeURIComponent%2Cg%3Dwindow%2Ch%3Ddocument%3Bfunction%20l%28a%2Cb%29%7Breturn%20a%2Eload%3Db%7Dvar%20m%3D%22replace%22%2Cn%3D%22charAt%22%2Cq%3D%22getTime%22%2Cr%3D%22setTimeout%22%2Ct%3D%22push%22%2Cu%3D%22indexOf%22%2Cv%3D%22ServiceBase%22%2Cw%3D%22name%22%2Cx%3D%22length%22%2Cy%3D%22prototype%22%2Cz%3D%22loader%22%2CA%3D%22substring%22%2CB%3D%22join%22%2CC%3D%22toLowerCase%22%3Bfunction%20D%28a%29%7Breturn%20a%20in%20E%3FE%5Ba%5D%3AE%5Ba%5D%3D%2D1%21%3Dnavigator%2EuserAgent%5BC%5D%28%29%5Bu%5D%28a%29%7Dvar%20E%3D%7B%7D%3Bfunction%20F%28a%2Cb%29%7Bvar%20c%3Dfunction%28%29%7B%7D%3Bc%2Eprototype%3Db%5By%5D%3Ba%2EU%3Db%5By%5D%3Ba%2Eprototype%3Dnew%20c%7D%0Afunction%20G%28a%2Cb%2Cc%29%7Bvar%20e%3DArray%5By%5D%2Eslice%2Ecall%28arguments%2C2%29%7C%7C%5B%5D%3Breturn%20function%28%29%7Breturn%20a%2Eapply%28b%2Ce%2Econcat%28Array%5By%5D%2Eslice%2Ecall%28arguments%29%29%29%7D%7Dfunction%20H%28a%29%7Ba%3DError%28a%29%3Ba%2EtoString%3Dfunction%28%29%7Breturn%20this%2Emessage%7D%3Breturn%20a%7Dfunction%20I%28a%2Cb%29%7Bfor%28var%20c%3Da%2Esplit%28%2F%5C%2E%2F%29%2Ce%3Dg%2Cf%3D0%3Bf%3Cc%5Bx%5D%2D1%3Bf%2B%2B%29e%5Bc%5Bf%5D%5D%7C%7C%28e%5Bc%5Bf%5D%5D%3D%7B%7D%29%2Ce%3De%5Bc%5Bf%5D%5D%3Be%5Bc%5Bc%5Bx%5D%2D1%5D%5D%3Db%7Dfunction%20J%28a%2Cb%2Cc%29%7Ba%5Bb%5D%3Dc%7Dif%28%21K%29var%20K%3DI%3Bif%28%21L%29var%20L%3DJ%3Bgoogle%5Bz%5D%2Ev%3D%7B%7D%3BK%28%22google%2Eloader%2Ecallbacks%22%2Cgoogle%5Bz%5D%2Ev%29%3Bvar%20M%3D%7B%7D%2CN%3D%7B%7D%3Bgoogle%5Bz%5D%2Eeval%3D%7B%7D%3BK%28%22google%2Eloader%2Eeval%22%2Cgoogle%5Bz%5D%2Eeval%29%3B%0Al%28google%2Cfunction%28a%2Cb%2Cc%29%7Bfunction%20e%28a%29%7Bvar%20b%3Da%2Esplit%28%22%2E%22%29%3Bif%282%3Cb%5Bx%5D%29throw%20H%28%22Module%3A%20%27%22%2Ba%2B%22%27%20not%20found%21%22%29%3B%22undefined%22%21%3Dtypeof%20b%5B1%5D%26%26%28f%3Db%5B0%5D%2Cc%2Epackages%3Dc%2Epackages%7C%7C%5B%5D%2Cc%2Epackages%5Bt%5D%28b%5B1%5D%29%29%7Dvar%20f%3Da%3Bc%3Dc%7C%7C%7B%7D%3Bif%28a%20instanceof%20Array%7C%7Ca%26%26%22object%22%3D%3Dtypeof%20a%26%26%22function%22%3D%3Dtypeof%20a%5BB%5D%26%26%22function%22%3D%3Dtypeof%20a%2Ereverse%29for%28var%20k%3D0%3Bk%3Ca%5Bx%5D%3Bk%2B%2B%29e%28a%5Bk%5D%29%3Belse%20e%28a%29%3Bif%28a%3DM%5B%22%3A%22%2Bf%5D%29%7Bc%26%26%21c%2Elanguage%26%26c%2Elocale%26%26%28c%2Elanguage%3Dc%2Elocale%29%3Bc%26%26%22string%22%3D%3Dtypeof%20c%2Ecallback%26%26%28k%3Dc%2Ecallback%2Ck%2Ematch%28%2F%5E%5B%5B%5C%5DA%2DZa%2Dz0%2D9%2E%5F%5D%2B%24%2F%29%26%26%28k%3Dg%2Eeval%28k%29%2Cc%2Ecallback%3D%0Ak%29%29%3Bif%28%28k%3Dc%26%26null%21%3Dc%2Ecallback%29%26%26%21a%2Es%28b%29%29throw%20H%28%22Module%3A%20%27%22%2Bf%2B%22%27%20must%20be%20loaded%20before%20DOM%20onLoad%21%22%29%3Bk%3Fa%2Em%28b%2Cc%29%3Fg%5Br%5D%28c%2Ecallback%2C0%29%3Aa%2Eload%28b%2Cc%29%3Aa%2Em%28b%2Cc%29%7C%7Ca%2Eload%28b%2Cc%29%7Delse%20throw%20H%28%22Module%3A%20%27%22%2Bf%2B%22%27%20not%20found%21%22%29%3B%7D%29%3BK%28%22google%2Eload%22%2Cgoogle%2Eload%29%3B%0Agoogle%2ET%3Dfunction%28a%2Cb%29%7Bb%3F%280%3D%3DO%5Bx%5D%26%26%28P%28g%2C%22load%22%2CQ%29%2C%21D%28%22msie%22%29%26%26%21D%28%22safari%22%29%26%26%21D%28%22konqueror%22%29%26%26D%28%22mozilla%22%29%7C%7Cg%2Eopera%3Fg%2EaddEventListener%28%22DOMContentLoaded%22%2CQ%2C%211%29%3AD%28%22msie%22%29%3Fh%2Ewrite%28%22%3Cscript%20defer%20onreadystatechange%3D%27google%2Eloader%2EdomReady%28%29%27%20src%3D%2F%2F%3A%3E%5Cx3c%2Fscript%3E%22%29%3A%28D%28%22safari%22%29%7C%7CD%28%22konqueror%22%29%29%26%26g%5Br%5D%28S%2C10%29%29%2CO%5Bt%5D%28a%29%29%3AP%28g%2C%22load%22%2Ca%29%7D%3BK%28%22google%2EsetOnLoadCallback%22%2Cgoogle%2ET%29%3B%0Afunction%20P%28a%2Cb%2Cc%29%7Bif%28a%2EaddEventListener%29a%2EaddEventListener%28b%2Cc%2C%211%29%3Belse%20if%28a%2EattachEvent%29a%2EattachEvent%28%22on%22%2Bb%2Cc%29%3Belse%7Bvar%20e%3Da%5B%22on%22%2Bb%5D%3Ba%5B%22on%22%2Bb%5D%3Dnull%21%3De%3Faa%28%5Bc%2Ce%5D%29%3Ac%7D%7Dfunction%20aa%28a%29%7Breturn%20function%28%29%7Bfor%28var%20b%3D0%3Bb%3Ca%5Bx%5D%3Bb%2B%2B%29a%5Bb%5D%28%29%7D%7Dvar%20O%3D%5B%5D%3Bgoogle%5Bz%5D%2EP%3Dfunction%28%29%7Bvar%20a%3Dg%2Eevent%2EsrcElement%3B%22complete%22%3D%3Da%2EreadyState%26%26%28a%2Eonreadystatechange%3Dnull%2Ca%2EparentNode%2EremoveChild%28a%29%2CQ%28%29%29%7D%3BK%28%22google%2Eloader%2EdomReady%22%2Cgoogle%5Bz%5D%2EP%29%3Bvar%20ba%3D%7Bloaded%3A%210%2Ccomplete%3A%210%7D%3Bfunction%20S%28%29%7Bba%5Bh%2EreadyState%5D%3FQ%28%29%3A0%3CO%5Bx%5D%26%26g%5Br%5D%28S%2C10%29%7D%0Afunction%20Q%28%29%7Bfor%28var%20a%3D0%3Ba%3CO%5Bx%5D%3Ba%2B%2B%29O%5Ba%5D%28%29%3BO%2Elength%3D0%7Dgoogle%5Bz%5D%2Ed%3Dfunction%28a%2Cb%2Cc%29%7Bif%28c%29%7Bvar%20e%3B%22script%22%3D%3Da%3F%28e%3Dh%2EcreateElement%28%22script%22%29%2Ce%2Etype%3D%22text%2Fjavascript%22%2Ce%2Esrc%3Db%29%3A%22css%22%3D%3Da%26%26%28e%3Dh%2EcreateElement%28%22link%22%29%2Ce%2Etype%3D%22text%2Fcss%22%2Ce%2Ehref%3Db%2Ce%2Erel%3D%22stylesheet%22%29%3B%28a%3Dh%2EgetElementsByTagName%28%22head%22%29%5B0%5D%29%7C%7C%28a%3Dh%2Ebody%2EparentNode%2EappendChild%28h%2EcreateElement%28%22head%22%29%29%29%3Ba%2EappendChild%28e%29%7Delse%22script%22%3D%3Da%3Fh%2Ewrite%28%27%3Cscript%20src%3D%22%27%2Bb%2B%27%22%20type%3D%22text%2Fjavascript%22%3E%5Cx3c%2Fscript%3E%27%29%3A%22css%22%3D%3Da%26%26h%2Ewrite%28%27%3Clink%20href%3D%22%27%2Bb%2B%27%22%20type%3D%22text%2Fcss%22%20rel%3D%22stylesheet%22%3E%3C%2Flink%3E%27%29%7D%3B%0AK%28%22google%2Eloader%2EwriteLoadTag%22%2Cgoogle%5Bz%5D%2Ed%29%3Bgoogle%5Bz%5D%2EQ%3Dfunction%28a%29%7BN%3Da%7D%3BK%28%22google%2Eloader%2Erfm%22%2Cgoogle%5Bz%5D%2EQ%29%3Bgoogle%5Bz%5D%2ES%3Dfunction%28a%29%7Bfor%28var%20b%20in%20a%29%22string%22%3D%3Dtypeof%20b%26%26b%26%26%22%3A%22%3D%3Db%5Bn%5D%280%29%26%26%21M%5Bb%5D%26%26%28M%5Bb%5D%3Dnew%20T%28b%5BA%5D%281%29%2Ca%5Bb%5D%29%29%7D%3BK%28%22google%2Eloader%2Erpl%22%2Cgoogle%5Bz%5D%2ES%29%3Bgoogle%5Bz%5D%2ER%3Dfunction%28a%29%7Bif%28%28a%3Da%2Especs%29%26%26a%5Bx%5D%29for%28var%20b%3D0%3Bb%3Ca%5Bx%5D%3B%2B%2Bb%29%7Bvar%20c%3Da%5Bb%5D%3B%22string%22%3D%3Dtypeof%20c%3FM%5B%22%3A%22%2Bc%5D%3Dnew%20U%28c%29%3A%28c%3Dnew%20V%28c%5Bw%5D%2Cc%2EbaseSpec%2Cc%2EcustomSpecs%29%2CM%5B%22%3A%22%2Bc%5Bw%5D%5D%3Dc%29%7D%7D%3BK%28%22google%2Eloader%2Erm%22%2Cgoogle%5Bz%5D%2ER%29%3Bgoogle%5Bz%5D%2Eloaded%3Dfunction%28a%29%7BM%5B%22%3A%22%2Ba%2Emodule%5D%2El%28a%29%7D%3B%0AK%28%22google%2Eloader%2Eloaded%22%2Cgoogle%5Bz%5D%2Eloaded%29%3Bgoogle%5Bz%5D%2EO%3Dfunction%28%29%7Breturn%22qid%3D%22%2B%28%28new%20Date%29%5Bq%5D%28%29%2EtoString%2816%29%2BMath%2Efloor%281E7%2AMath%2Erandom%28%29%29%2EtoString%2816%29%29%7D%3BK%28%22google%2Eloader%2EcreateGuidArg%5F%22%2Cgoogle%5Bz%5D%2EO%29%3BI%28%22google%5FexportSymbol%22%2CI%29%3BI%28%22google%5FexportProperty%22%2CJ%29%3Bgoogle%5Bz%5D%2Ea%3D%7B%7D%3BK%28%22google%2Eloader%2Ethemes%22%2Cgoogle%5Bz%5D%2Ea%29%3Bgoogle%5Bz%5D%2Ea%2EI%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fbubblegum%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22BUBBLEGUM%22%2Cgoogle%5Bz%5D%2Ea%2EI%29%3Bgoogle%5Bz%5D%2Ea%2EK%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fgreensky%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22GREENSKY%22%2Cgoogle%5Bz%5D%2Ea%2EK%29%3B%0Agoogle%5Bz%5D%2Ea%2EJ%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fespresso%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22ESPRESSO%22%2Cgoogle%5Bz%5D%2Ea%2EJ%29%3Bgoogle%5Bz%5D%2Ea%2EM%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fshiny%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22SHINY%22%2Cgoogle%5Bz%5D%2Ea%2EM%29%3Bgoogle%5Bz%5D%2Ea%2EL%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fminimalist%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22MINIMALIST%22%2Cgoogle%5Bz%5D%2Ea%2EL%29%3Bgoogle%5Bz%5D%2Ea%2EN%3D%22%2F%2Fwww%2Egoogle%2Ecom%2Fcse%2Fstyle%2Flook%2Fv2%2Fdefault%2Ecss%22%3BL%28google%5Bz%5D%2Ea%2C%22V2%5FDEFAULT%22%2Cgoogle%5Bz%5D%2Ea%2EN%29%3Bfunction%20U%28a%29%7Bthis%2Eb%3Da%3Bthis%2Eo%3D%5B%5D%3Bthis%2En%3D%7B%7D%3Bthis%2Ee%3D%7B%7D%3Bthis%2Ef%3D%7B%7D%3Bthis%2Ej%3D%210%3Bthis%2Ec%3D%2D1%7D%0AU%5By%5D%2Eg%3Dfunction%28a%2Cb%29%7Bvar%20c%3D%22%22%3Bvoid%200%21%3Db%26%26%28void%200%21%3Db%2Elanguage%26%26%28c%2B%3D%22%26hl%3D%22%2Bd%28b%2Elanguage%29%29%2Cvoid%200%21%3Db%2Enocss%26%26%28c%2B%3D%22%26output%3D%22%2Bd%28%22nocss%3D%22%2Bb%2Enocss%29%29%2Cvoid%200%21%3Db%2Enooldnames%26%26%28c%2B%3D%22%26nooldnames%3D%22%2Bd%28b%2Enooldnames%29%29%2Cvoid%200%21%3Db%2Epackages%26%26%28c%2B%3D%22%26packages%3D%22%2Bd%28b%2Epackages%29%29%2Cnull%21%3Db%2Ecallback%26%26%28c%2B%3D%22%26async%3D2%22%29%2Cvoid%200%21%3Db%2Estyle%26%26%28c%2B%3D%22%26style%3D%22%2Bd%28b%2Estyle%29%29%2Cvoid%200%21%3Db%2Enoexp%26%26%28c%2B%3D%22%26noexp%3Dtrue%22%29%2Cvoid%200%21%3Db%2Eother%5Fparams%26%26%28c%2B%3D%22%26%22%2Bb%2Eother%5Fparams%29%29%3Bif%28%21this%2Ej%29%7Bgoogle%5Bthis%2Eb%5D%26%26google%5Bthis%2Eb%5D%2EJSHash%26%26%28c%2B%3D%22%26sig%3D%22%2Bd%28google%5Bthis%2Eb%5D%2EJSHash%29%29%3B%0Avar%20e%3D%5B%5D%2Cf%3Bfor%28f%20in%20this%2En%29%22%3A%22%3D%3Df%5Bn%5D%280%29%26%26e%5Bt%5D%28f%5BA%5D%281%29%29%3Bfor%28f%20in%20this%2Ee%29%22%3A%22%3D%3Df%5Bn%5D%280%29%26%26this%2Ee%5Bf%5D%26%26e%5Bt%5D%28f%5BA%5D%281%29%29%3Bc%2B%3D%22%26have%3D%22%2Bd%28e%5BB%5D%28%22%2C%22%29%29%7Dreturn%20google%5Bz%5D%5Bv%5D%2B%22%2F%3Ffile%3D%22%2Bthis%2Eb%2B%22%26v%3D%22%2Ba%2Bgoogle%5Bz%5D%2EAdditionalParams%2Bc%7D%3BU%5By%5D%2Et%3Dfunction%28a%29%7Bvar%20b%3Dnull%3Ba%26%26%28b%3Da%2Epackages%29%3Bvar%20c%3Dnull%3Bif%28b%29if%28%22string%22%3D%3Dtypeof%20b%29c%3D%5Ba%2Epackages%5D%3Belse%20if%28b%5Bx%5D%29for%28c%3D%5B%5D%2Ca%3D0%3Ba%3Cb%5Bx%5D%3Ba%2B%2B%29%22string%22%3D%3Dtypeof%20b%5Ba%5D%26%26c%5Bt%5D%28b%5Ba%5D%5Bm%5D%28%2F%5E%5Cs%2A%7C%5Cs%2A%24%2F%2C%22%22%29%5BC%5D%28%29%29%3Bc%7C%7C%28c%3D%5B%22default%22%5D%29%3Bb%3D%5B%5D%3Bfor%28a%3D0%3Ba%3Cc%5Bx%5D%3Ba%2B%2B%29this%2En%5B%22%3A%22%2Bc%5Ba%5D%5D%7C%7Cb%5Bt%5D%28c%5Ba%5D%29%3Breturn%20b%7D%3B%0Al%28U%5By%5D%2Cfunction%28a%2Cb%29%7Bvar%20c%3Dthis%2Et%28b%29%2Ce%3Db%26%26null%21%3Db%2Ecallback%3Bif%28e%29var%20f%3Dnew%20W%28b%2Ecallback%29%3Bfor%28var%20k%3D%5B%5D%2Cp%3Dc%5Bx%5D%2D1%3B0%3C%3Dp%3Bp%2D%2D%29%7Bvar%20s%3Dc%5Bp%5D%3Be%26%26f%2EB%28s%29%3Bif%28this%2Ee%5B%22%3A%22%2Bs%5D%29c%2Esplice%28p%2C1%29%2Ce%26%26this%2Ef%5B%22%3A%22%2Bs%5D%5Bt%5D%28f%29%3Belse%20k%5Bt%5D%28s%29%7Dif%28c%5Bx%5D%29%7Bb%26%26b%2Epackages%26%26%28b%2Epackages%3Dc%2Esort%28%29%5BB%5D%28%22%2C%22%29%29%3Bfor%28p%3D0%3Bp%3Ck%5Bx%5D%3Bp%2B%2B%29s%3Dk%5Bp%5D%2Cthis%2Ef%5B%22%3A%22%2Bs%5D%3D%5B%5D%2Ce%26%26this%2Ef%5B%22%3A%22%2Bs%5D%5Bt%5D%28f%29%3Bif%28b%7C%7Cnull%3D%3DN%5B%22%3A%22%2Bthis%2Eb%5D%7C%7Cnull%3D%3DN%5B%22%3A%22%2Bthis%2Eb%5D%2Eversions%5B%22%3A%22%2Ba%5D%7C%7Cgoogle%5Bz%5D%2EAdditionalParams%7C%7C%21this%2Ej%29b%26%26b%2Eautoloaded%7C%7Cgoogle%5Bz%5D%2Ed%28%22script%22%2Cthis%2Eg%28a%2Cb%29%2Ce%29%3Belse%7Bc%3DN%5B%22%3A%22%2Bthis%2Eb%5D%3B%0Agoogle%5Bthis%2Eb%5D%3Dgoogle%5Bthis%2Eb%5D%7C%7C%7B%7D%3Bfor%28var%20R%20in%20c%2Eproperties%29R%26%26%22%3A%22%3D%3DR%5Bn%5D%280%29%26%26%28google%5Bthis%2Eb%5D%5BR%5BA%5D%281%29%5D%3Dc%2Eproperties%5BR%5D%29%3Bgoogle%5Bz%5D%2Ed%28%22script%22%2Cgoogle%5Bz%5D%5Bv%5D%2Bc%2Epath%2Bc%2Ejs%2Ce%29%3Bc%2Ecss%26%26google%5Bz%5D%2Ed%28%22css%22%2Cgoogle%5Bz%5D%5Bv%5D%2Bc%2Epath%2Bc%2Ecss%2Ce%29%7Dthis%2Ej%26%26%28this%2Ej%3D%211%2Cthis%2Ec%3D%28new%20Date%29%5Bq%5D%28%29%2C1%21%3Dthis%2Ec%25100%26%26%28this%2Ec%3D%2D1%29%29%3Bfor%28p%3D0%3Bp%3Ck%5Bx%5D%3Bp%2B%2B%29s%3Dk%5Bp%5D%2Cthis%2Ee%5B%22%3A%22%2Bs%5D%3D%210%7D%7D%29%3B%0AU%5By%5D%2El%3Dfunction%28a%29%7B%2D1%21%3Dthis%2Ec%26%26%28X%28%22al%5F%22%2Bthis%2Eb%2C%22jl%2E%22%2B%28%28new%20Date%29%5Bq%5D%28%29%2Dthis%2Ec%29%2C%210%29%2Cthis%2Ec%3D%2D1%29%3Bthis%2Eo%3Dthis%2Eo%2Econcat%28a%2Ecomponents%29%3Bgoogle%5Bz%5D%5Bthis%2Eb%5D%7C%7C%28google%5Bz%5D%5Bthis%2Eb%5D%3D%7B%7D%29%3Bgoogle%5Bz%5D%5Bthis%2Eb%5D%2Epackages%3Dthis%2Eo%2Eslice%280%29%3Bfor%28var%20b%3D0%3Bb%3Ca%2Ecomponents%5Bx%5D%3Bb%2B%2B%29%7Bthis%2En%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%3D%210%3Bthis%2Ee%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%3D%211%3Bvar%20c%3Dthis%2Ef%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%3Bif%28c%29%7Bfor%28var%20e%3D0%3Be%3Cc%5Bx%5D%3Be%2B%2B%29c%5Be%5D%2EC%28a%2Ecomponents%5Bb%5D%29%3Bdelete%20this%2Ef%5B%22%3A%22%2Ba%2Ecomponents%5Bb%5D%5D%7D%7D%7D%3BU%5By%5D%2Em%3Dfunction%28a%2Cb%29%7Breturn%200%3D%3Dthis%2Et%28b%29%5Bx%5D%7D%3BU%5By%5D%2Es%3Dfunction%28%29%7Breturn%210%7D%3B%0Afunction%20W%28a%29%7Bthis%2EF%3Da%3Bthis%2Eq%3D%7B%7D%3Bthis%2Er%3D0%7DW%5By%5D%2EB%3Dfunction%28a%29%7Bthis%2Er%2B%2B%3Bthis%2Eq%5B%22%3A%22%2Ba%5D%3D%210%7D%3BW%5By%5D%2EC%3Dfunction%28a%29%7Bthis%2Eq%5B%22%3A%22%2Ba%5D%26%26%28this%2Eq%5B%22%3A%22%2Ba%5D%3D%211%2Cthis%2Er%2D%2D%2C0%3D%3Dthis%2Er%26%26g%5Br%5D%28this%2EF%2C0%29%29%7D%3Bfunction%20V%28a%2Cb%2Cc%29%7Bthis%2Ename%3Da%3Bthis%2ED%3Db%3Bthis%2Ep%3Dc%3Bthis%2Eu%3Dthis%2Eh%3D%211%3Bthis%2Ek%3D%5B%5D%3Bgoogle%5Bz%5D%2Ev%5Bthis%5Bw%5D%5D%3DG%28this%2El%2Cthis%29%7DF%28V%2CU%29%3Bl%28V%5By%5D%2Cfunction%28a%2Cb%29%7Bvar%20c%3Db%26%26null%21%3Db%2Ecallback%3Bc%3F%28this%2Ek%5Bt%5D%28b%2Ecallback%29%2Cb%2Ecallback%3D%22google%2Eloader%2Ecallbacks%2E%22%2Bthis%5Bw%5D%29%3Athis%2Eh%3D%210%3Bb%26%26b%2Eautoloaded%7C%7Cgoogle%5Bz%5D%2Ed%28%22script%22%2Cthis%2Eg%28a%2Cb%29%2Cc%29%7D%29%3BV%5By%5D%2Em%3Dfunction%28a%2Cb%29%7Breturn%20b%26%26null%21%3Db%2Ecallback%3Fthis%2Eu%3Athis%2Eh%7D%3BV%5By%5D%2El%3Dfunction%28%29%7Bthis%2Eu%3D%210%3Bfor%28var%20a%3D0%3Ba%3Cthis%2Ek%5Bx%5D%3Ba%2B%2B%29g%5Br%5D%28this%2Ek%5Ba%5D%2C0%29%3Bthis%2Ek%3D%5B%5D%7D%3B%0Avar%20Y%3Dfunction%28a%2Cb%29%7Breturn%20a%2Estring%3Fd%28a%2Estring%29%2B%22%3D%22%2Bd%28b%29%3Aa%2Eregex%3Fb%5Bm%5D%28%2F%28%5E%2E%2A%24%29%2F%2Ca%2Eregex%29%3A%22%22%7D%3BV%5By%5D%2Eg%3Dfunction%28a%2Cb%29%7Breturn%20this%2EG%28this%2Ew%28a%29%2Ca%2Cb%29%7D%3B%0AV%5By%5D%2EG%3Dfunction%28a%2Cb%2Cc%29%7Bvar%20e%3D%22%22%3Ba%2Ekey%26%26%28e%2B%3D%22%26%22%2BY%28a%2Ekey%2Cgoogle%5Bz%5D%2EApiKey%29%29%3Ba%2Eversion%26%26%28e%2B%3D%22%26%22%2BY%28a%2Eversion%2Cb%29%29%3Bb%3Dgoogle%5Bz%5D%2ESecure%26%26a%2Essl%3Fa%2Essl%3Aa%2Euri%3Bif%28null%21%3Dc%29for%28var%20f%20in%20c%29a%2Eparams%5Bf%5D%3Fe%2B%3D%22%26%22%2BY%28a%2Eparams%5Bf%5D%2Cc%5Bf%5D%29%3A%22other%5Fparams%22%3D%3Df%3Fe%2B%3D%22%26%22%2Bc%5Bf%5D%3A%22base%5Fdomain%22%3D%3Df%26%26%28b%3D%22http%3A%2F%2F%22%2Bc%5Bf%5D%2Ba%2Euri%5BA%5D%28a%2Euri%5Bu%5D%28%22%2F%22%2C7%29%29%29%3Bgoogle%5Bthis%5Bw%5D%5D%3D%7B%7D%3B%2D1%3D%3Db%5Bu%5D%28%22%3F%22%29%26%26e%26%26%28e%3D%22%3F%22%2Be%5BA%5D%281%29%29%3Breturn%20b%2Be%7D%3BV%5By%5D%2Es%3Dfunction%28a%29%7Breturn%20this%2Ew%28a%29%2Edeferred%7D%3BV%5By%5D%2Ew%3Dfunction%28a%29%7Bif%28this%2Ep%29for%28var%20b%3D0%3Bb%3Cthis%2Ep%5Bx%5D%3B%2B%2Bb%29%7Bvar%20c%3Dthis%2Ep%5Bb%5D%3Bif%28%28new%20RegExp%28c%2Epattern%29%29%2Etest%28a%29%29return%20c%7Dreturn%20this%2ED%7D%3Bfunction%20T%28a%2Cb%29%7Bthis%2Eb%3Da%3Bthis%2Ei%3Db%3Bthis%2Eh%3D%211%7DF%28T%2CU%29%3Bl%28T%5By%5D%2Cfunction%28a%2Cb%29%7Bthis%2Eh%3D%210%3Bgoogle%5Bz%5D%2Ed%28%22script%22%2Cthis%2Eg%28a%2Cb%29%2C%211%29%7D%29%3BT%5By%5D%2Em%3Dfunction%28%29%7Breturn%20this%2Eh%7D%3BT%5By%5D%2El%3Dfunction%28%29%7B%7D%3BT%5By%5D%2Eg%3Dfunction%28a%2Cb%29%7Bif%28%21this%2Ei%2Eversions%5B%22%3A%22%2Ba%5D%29%7Bif%28this%2Ei%2Ealiases%29%7Bvar%20c%3Dthis%2Ei%2Ealiases%5B%22%3A%22%2Ba%5D%3Bc%26%26%28a%3Dc%29%7Dif%28%21this%2Ei%2Eversions%5B%22%3A%22%2Ba%5D%29throw%20H%28%22Module%3A%20%27%22%2Bthis%2Eb%2B%22%27%20with%20version%20%27%22%2Ba%2B%22%27%20not%20found%21%22%29%3B%7Dreturn%20google%5Bz%5D%2EGoogleApisBase%2B%22%2Flibs%2F%22%2Bthis%2Eb%2B%22%2F%22%2Ba%2B%22%2F%22%2Bthis%2Ei%2Eversions%5B%22%3A%22%2Ba%5D%5Bb%26%26b%2Euncompressed%3F%22uncompressed%22%3A%22compressed%22%5D%7D%3B%0AT%5By%5D%2Es%3Dfunction%28%29%7Breturn%211%7D%3Bvar%20ca%3D%211%2CZ%3D%5B%5D%2Cda%3D%28new%20Date%29%5Bq%5D%28%29%2Cfa%3Dfunction%28%29%7Bca%7C%7C%28P%28g%2C%22unload%22%2Cea%29%2Cca%3D%210%29%7D%2Cga%3Dfunction%28a%2Cb%29%7Bfa%28%29%3Bif%28%21%28google%5Bz%5D%2ESecure%7C%7Cgoogle%5Bz%5D%2EOptions%26%26%211%21%3D%3Dgoogle%5Bz%5D%2EOptions%2Ecsi%29%29%7Bfor%28var%20c%3D0%3Bc%3Ca%5Bx%5D%3Bc%2B%2B%29a%5Bc%5D%3Dd%28a%5Bc%5D%5BC%5D%28%29%5Bm%5D%28%2F%5B%5Ea%2Dz0%2D9%5F%2E%5D%2B%2Fg%2C%22%5F%22%29%29%3Bfor%28c%3D0%3Bc%3Cb%5Bx%5D%3Bc%2B%2B%29b%5Bc%5D%3Dd%28b%5Bc%5D%5BC%5D%28%29%5Bm%5D%28%2F%5B%5Ea%2Dz0%2D9%5F%2E%5D%2B%2Fg%2C%22%5F%22%29%29%3Bg%5Br%5D%28G%28%24%2Cnull%2C%22%2F%2Fgg%2Egoogle%2Ecom%2Fcsi%3Fs%3Duds%26v%3D2%26action%3D%22%2Ba%5BB%5D%28%22%2C%22%29%2B%22%26it%3D%22%2Bb%5BB%5D%28%22%2C%22%29%29%2C1E4%29%7D%7D%2CX%3Dfunction%28a%2Cb%2Cc%29%7Bc%3Fga%28%5Ba%5D%2C%5Bb%5D%29%3A%28fa%28%29%2CZ%5Bt%5D%28%22r%22%2BZ%5Bx%5D%2B%22%3D%22%2Bd%28a%2B%28b%3F%22%7C%22%2Bb%3A%22%22%29%29%29%2Cg%5Br%5D%28ea%2C5%3CZ%5Bx%5D%3F0%3A15E3%29%29%7D%2Cea%3Dfunction%28%29%7Bif%28Z%5Bx%5D%29%7Bvar%20a%3D%0Agoogle%5Bz%5D%5Bv%5D%3B0%3D%3Da%5Bu%5D%28%22http%3A%22%29%26%26%28a%3Da%5Bm%5D%28%2F%5Ehttp%3A%2F%2C%22https%3A%22%29%29%3B%24%28a%2B%22%2Fstats%3F%22%2BZ%5BB%5D%28%22%26%22%29%2B%22%26nc%3D%22%2B%28new%20Date%29%5Bq%5D%28%29%2B%22%5F%22%2B%28%28new%20Date%29%5Bq%5D%28%29%2Dda%29%29%3BZ%2Elength%3D0%7D%7D%2C%24%3Dfunction%28a%29%7Bvar%20b%3Dnew%20Image%2Cc%3D%24%2EH%2B%2B%3B%24%2EA%5Bc%5D%3Db%3Bb%2Eonload%3Db%2Eonerror%3Dfunction%28%29%7Bdelete%20%24%2EA%5Bc%5D%7D%3Bb%2Esrc%3Da%3Bb%3Dnull%7D%3B%24%2EA%3D%7B%7D%3B%24%2EH%3D0%3BI%28%22google%2Eloader%2ErecordCsiStat%22%2Cga%29%3BI%28%22google%2Eloader%2ErecordStat%22%2CX%29%3BI%28%22google%2Eloader%2EcreateImageForLogging%22%2C%24%29%3B%0A%0A%7D%29%20%28%29%3Bgoogle%2Eloader%2Erm%28%7B%22specs%22%3A%5B%7B%22name%22%3A%22books%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fbooks%2Egoogle%2Ecom%2Fbooks%2Fapi%2Ejs%22%2C%22ssl%22%3A%22https%3A%2F%2Fencrypted%2Egoogle%2Ecom%2Fbooks%2Fapi%2Ejs%22%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22string%22%3A%22callback%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%7D%7D%2C%22feeds%22%2C%7B%22name%22%3A%22friendconnect%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fwww%2Egoogle%2Ecom%2Ffriendconnect%2Fscript%2Ffriendconnect%2Ejs%22%2C%22ssl%22%3A%22https%3A%2F%2Fwww%2Egoogle%2Ecom%2Ffriendconnect%2Fscript%2Ffriendconnect%2Ejs%22%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Afalse%2C%22params%22%3A%7B%7D%7D%7D%2C%22spreadsheets%22%2C%22identitytoolkit%22%2C%22gdata%22%2C%22ima%22%2C%22visualization%22%2C%7B%22name%22%3A%22sharing%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fwww%2Egoogle%2Ecom%2Fs2%2Fsharing%2Fjs%22%2C%22ssl%22%3Anull%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Afalse%2C%22params%22%3A%7B%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%7D%7D%2C%7B%22name%22%3A%22maps%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fmaps%2Egoogle%2Ecom%2Fmaps%3Ffile%5Cu003dgoogleapi%22%2C%22ssl%22%3A%22https%3A%2F%2Fmaps%2Dapi%2Dssl%2Egoogle%2Ecom%2Fmaps%3Ffile%5Cu003dgoogleapi%22%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22regex%22%3A%22callback%5Cu003d%241%5Cu0026async%5Cu003d2%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%7D%2C%22customSpecs%22%3A%5B%7B%22uri%22%3A%22http%3A%2F%2Fmaps%2Egoogleapis%2Ecom%2Fmaps%2Fapi%2Fjs%22%2C%22ssl%22%3A%22https%3A%2F%2Fmaps%2Egoogleapis%2Ecom%2Fmaps%2Fapi%2Fjs%22%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22string%22%3A%22callback%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%7D%2C%22pattern%22%3A%22%5E%283%7C3%2E%2E%2A%29%24%22%7D%5D%7D%2C%22search%22%2C%22annotations%5Fv2%22%2C%22payments%22%2C%22wave%22%2C%22orkut%22%2C%7B%22name%22%3A%22annotations%22%2C%22baseSpec%22%3A%7B%22uri%22%3A%22http%3A%2F%2Fwww%2Egoogle%2Ecom%2Freviews%2Fscripts%2Fannotations%5Fbootstrap%2Ejs%22%2C%22ssl%22%3Anull%2C%22key%22%3A%7B%22string%22%3A%22key%22%7D%2C%22version%22%3A%7B%22string%22%3A%22v%22%7D%2C%22deferred%22%3Atrue%2C%22params%22%3A%7B%22callback%22%3A%7B%22string%22%3A%22callback%22%7D%2C%22language%22%3A%7B%22string%22%3A%22hl%22%7D%2C%22country%22%3A%7B%22string%22%3A%22gl%22%7D%7D%7D%7D%2C%22language%22%2C%22earth%22%2C%22picker%22%2C%22ads%22%2C%22elements%22%5D%7D%29%3B%0Agoogle%2Eloader%2Erfm%28%7B%22%3Asearch%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fsearch%2F1%2E0%2F23952f7483f1bca4119a89c020d13def%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22css%22%3A%22default%2Ben%2Ecss%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%2223952f7483f1bca4119a89c020d13def%22%2C%22%3ANoOldNames%22%3Afalse%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Alanguage%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Flanguage%2F1%2E0%2F7b15944f20c0d2d7b2d2d87406a8916b%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%227b15944f20c0d2d7b2d2d87406a8916b%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Afeeds%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Ffeeds%2F1%2E0%2F482f2817cdf8982edf2e5669f9e3a627%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22css%22%3A%22default%2Ben%2Ecss%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%22482f2817cdf8982edf2e5669f9e3a627%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Aspreadsheets%22%3A%7B%22versions%22%3A%7B%22%3A0%22%3A%221%22%2C%22%3A0%2E4%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fspreadsheets%2F0%2E4%2F87ff7219e9f8a8164006cbf28d5e911a%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%2287ff7219e9f8a8164006cbf28d5e911a%22%2C%22%3AVersion%22%3A%220%2E4%22%7D%7D%2C%22%3Aima%22%3A%7B%22versions%22%3A%7B%22%3A3%22%3A%221%22%2C%22%3A3%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fima%2F3%2E0%2F28a914332232c9a8ac0ae8da68b1006e%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%2228a914332232c9a8ac0ae8da68b1006e%22%2C%22%3AVersion%22%3A%223%2E0%22%7D%7D%2C%22%3Awave%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fwave%2F1%2E0%2F3b6f7573ff78da6602dda5e09c9025bf%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%223b6f7573ff78da6602dda5e09c9025bf%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Aannotations%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fannotations%2F1%2E0%2Fee29f1a32c343fea662c6e1b58ec6d0d%2F%22%2C%22js%22%3A%22default%2Ben%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%22ee29f1a32c343fea662c6e1b58ec6d0d%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Aearth%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fearth%2F1%2E0%2Fdb22e5693e0a8de1f62f3536f5a8d7d3%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%22db22e5693e0a8de1f62f3536f5a8d7d3%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%2C%22%3Apicker%22%3A%7B%22versions%22%3A%7B%22%3A1%22%3A%221%22%2C%22%3A1%2E0%22%3A%221%22%7D%2C%22path%22%3A%22%2Fapi%2Fpicker%2F1%2E0%2F1c635e91b9d0c082c660a42091913907%2F%22%2C%22js%22%3A%22default%2EI%2Ejs%22%2C%22css%22%3A%22default%2Ecss%22%2C%22properties%22%3A%7B%22%3AJSHash%22%3A%221c635e91b9d0c082c660a42091913907%22%2C%22%3AVersion%22%3A%221%2E0%22%7D%7D%7D%29%3B%0Agoogle%2Eloader%2Erpl%28%7B%22%3Ascriptaculous%22%3A%7B%22versions%22%3A%7B%22%3A1%2E8%2E3%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%2C%22%3A1%2E9%2E0%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%2C%22%3A1%2E8%2E2%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%2C%22%3A1%2E8%2E1%22%3A%7B%22uncompressed%22%3A%22scriptaculous%2Ejs%22%2C%22compressed%22%3A%22scriptaculous%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E8%22%3A%221%2E8%2E3%22%2C%22%3A1%22%3A%221%2E9%2E0%22%2C%22%3A1%2E9%22%3A%221%2E9%2E0%22%7D%7D%2C%22%3Ayui%22%3A%7B%22versions%22%3A%7B%22%3A2%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E9%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E8%2E0r4%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E8%2E2r1%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A2%2E8%2E1%22%3A%7B%22uncompressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Ejs%22%2C%22compressed%22%3A%22build%2Fyuiloader%2Fyuiloader%2Dmin%2Ejs%22%7D%2C%22%3A3%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22build%2Fyui%2Fyui%2Ejs%22%2C%22compressed%22%3A%22build%2Fyui%2Fyui%2Dmin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A3%22%3A%223%2E3%2E0%22%2C%22%3A2%22%3A%222%2E9%2E0%22%2C%22%3A2%2E7%22%3A%222%2E7%2E0%22%2C%22%3A2%2E8%2E2%22%3A%222%2E8%2E2r1%22%2C%22%3A2%2E6%22%3A%222%2E6%2E0%22%2C%22%3A2%2E9%22%3A%222%2E9%2E0%22%2C%22%3A2%2E8%22%3A%222%2E8%2E2r1%22%2C%22%3A2%2E8%2E0%22%3A%222%2E8%2E0r4%22%2C%22%3A3%2E3%22%3A%223%2E3%2E0%22%7D%7D%2C%22%3Aswfobject%22%3A%7B%22versions%22%3A%7B%22%3A2%2E1%22%3A%7B%22uncompressed%22%3A%22swfobject%5Fsrc%2Ejs%22%2C%22compressed%22%3A%22swfobject%2Ejs%22%7D%2C%22%3A2%2E2%22%3A%7B%22uncompressed%22%3A%22swfobject%5Fsrc%2Ejs%22%2C%22compressed%22%3A%22swfobject%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A2%22%3A%222%2E2%22%7D%7D%2C%22%3Awebfont%22%3A%7B%22versions%22%3A%7B%22%3A1%2E0%2E28%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E27%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E29%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E12%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E13%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E14%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E15%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E10%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E11%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E2%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E1%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E6%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E19%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E5%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E18%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E4%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E17%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E16%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E3%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E9%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E21%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E22%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E25%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E26%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E23%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%2C%22%3A1%2E0%2E24%22%3A%7B%22uncompressed%22%3A%22webfont%5Fdebug%2Ejs%22%2C%22compressed%22%3A%22webfont%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%22%3A%221%2E0%2E29%22%2C%22%3A1%2E0%22%3A%221%2E0%2E29%22%7D%7D%2C%22%3Aext%2Dcore%22%3A%7B%22versions%22%3A%7B%22%3A3%2E1%2E0%22%3A%7B%22uncompressed%22%3A%22ext%2Dcore%2Ddebug%2Ejs%22%2C%22compressed%22%3A%22ext%2Dcore%2Ejs%22%7D%2C%22%3A3%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22ext%2Dcore%2Ddebug%2Ejs%22%2C%22compressed%22%3A%22ext%2Dcore%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A3%22%3A%223%2E1%2E0%22%2C%22%3A3%2E0%22%3A%223%2E0%2E0%22%2C%22%3A3%2E1%22%3A%223%2E1%2E0%22%7D%7D%2C%22%3Amootools%22%3A%7B%22versions%22%3A%7B%22%3A1%2E3%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E1%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E3%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E1%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E3%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E4%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E2%2E5%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E4%2E0%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E4%2E1%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%2C%22%3A1%2E4%2E2%22%3A%7B%22uncompressed%22%3A%22mootools%2Ejs%22%2C%22compressed%22%3A%22mootools%2Dyui%2Dcompressed%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%22%3A%221%2E1%2E2%22%2C%22%3A1%2E11%22%3A%221%2E1%2E1%22%2C%22%3A1%2E4%22%3A%221%2E4%2E2%22%2C%22%3A1%2E3%22%3A%221%2E3%2E2%22%2C%22%3A1%2E2%22%3A%221%2E2%2E5%22%2C%22%3A1%2E1%22%3A%221%2E1%2E2%22%7D%7D%2C%22%3Ajqueryui%22%3A%7B%22versions%22%3A%7B%22%3A1%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E9%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E15%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E14%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E7%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E13%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E8%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E12%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E5%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E11%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E10%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E6%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E4%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E17%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%2C%22%3A1%2E8%2E16%22%3A%7B%22uncompressed%22%3A%22jquery%2Dui%2Ejs%22%2C%22compressed%22%3A%22jquery%2Dui%2Emin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E8%22%3A%221%2E8%2E17%22%2C%22%3A1%2E7%22%3A%221%2E7%2E3%22%2C%22%3A1%2E6%22%3A%221%2E6%2E0%22%2C%22%3A1%22%3A%221%2E8%2E17%22%2C%22%3A1%2E5%22%3A%221%2E5%2E3%22%2C%22%3A1%2E8%2E3%22%3A%221%2E8%2E4%22%7D%7D%2C%22%3Achrome%2Dframe%22%3A%7B%22versions%22%3A%7B%22%3A1%2E0%2E2%22%3A%7B%22uncompressed%22%3A%22CFInstall%2Ejs%22%2C%22compressed%22%3A%22CFInstall%2Emin%2Ejs%22%7D%2C%22%3A1%2E0%2E1%22%3A%7B%22uncompressed%22%3A%22CFInstall%2Ejs%22%2C%22compressed%22%3A%22CFInstall%2Emin%2Ejs%22%7D%2C%22%3A1%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22CFInstall%2Ejs%22%2C%22compressed%22%3A%22CFInstall%2Emin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%22%3A%221%2E0%2E2%22%2C%22%3A1%2E0%22%3A%221%2E0%2E2%22%7D%7D%2C%22%3Aprototype%22%3A%7B%22versions%22%3A%7B%22%3A1%2E7%2E0%2E0%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%2C%22%3A1%2E6%2E0%2E2%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%2C%22%3A1%2E6%2E1%2E0%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%2C%22%3A1%2E6%2E0%2E3%22%3A%7B%22uncompressed%22%3A%22prototype%2Ejs%22%2C%22compressed%22%3A%22prototype%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E7%22%3A%221%2E7%2E0%2E0%22%2C%22%3A1%2E6%2E1%22%3A%221%2E6%2E1%2E0%22%2C%22%3A1%22%3A%221%2E7%2E0%2E0%22%2C%22%3A1%2E6%22%3A%221%2E6%2E1%2E0%22%2C%22%3A1%2E7%2E0%22%3A%221%2E7%2E0%2E0%22%2C%22%3A1%2E6%2E0%22%3A%221%2E6%2E0%2E3%22%7D%7D%2C%22%3Ajquery%22%3A%7B%22versions%22%3A%7B%22%3A1%2E6%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E3%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E4%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E3%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E2%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E7%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E2%2E6%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E3%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E4%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E0%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E5%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E1%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%2C%22%3A1%2E4%2E2%22%3A%7B%22uncompressed%22%3A%22jquery%2Ejs%22%2C%22compressed%22%3A%22jquery%2Emin%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E7%22%3A%221%2E7%2E1%22%2C%22%3A1%2E6%22%3A%221%2E6%2E4%22%2C%22%3A1%22%3A%221%2E7%2E1%22%2C%22%3A1%2E5%22%3A%221%2E5%2E2%22%2C%22%3A1%2E4%22%3A%221%2E4%2E4%22%2C%22%3A1%2E3%22%3A%221%2E3%2E2%22%2C%22%3A1%2E2%22%3A%221%2E2%2E6%22%7D%7D%2C%22%3Adojo%22%3A%7B%22versions%22%3A%7B%22%3A1%2E3%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E6%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E3%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E1%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E3%2E2%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E6%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E2%2E3%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E7%2E2%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Ejs%22%7D%2C%22%3A1%2E7%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Ejs%22%7D%2C%22%3A1%2E7%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Ejs%22%7D%2C%22%3A1%2E4%2E3%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E5%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E5%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E2%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E4%2E0%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%2C%22%3A1%2E4%2E1%22%3A%7B%22uncompressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%2Euncompressed%2Ejs%22%2C%22compressed%22%3A%22dojo%2Fdojo%2Exd%2Ejs%22%7D%7D%2C%22aliases%22%3A%7B%22%3A1%2E7%22%3A%221%2E7%2E2%22%2C%22%3A1%22%3A%221%2E6%2E1%22%2C%22%3A1%2E6%22%3A%221%2E6%2E1%22%2C%22%3A1%2E5%22%3A%221%2E5%2E1%22%2C%22%3A1%2E4%22%3A%221%2E4%2E3%22%2C%22%3A1%2E3%22%3A%221%2E3%2E2%22%2C%22%3A1%2E2%22%3A%221%2E2%2E3%22%2C%22%3A1%2E1%22%3A%221%2E1%2E1%22%7D%7D%7D%29%3B%0A%7D%0AdisplayChartBarChartID3a357f19fbc6%28%29%3B" type="text/javascript"></script>
+<!-- divChart -->
+<div id="BarChartID3a357f19fbc6" style="width: 500; height: automatic;">
+
+</div>
+<div>
+<span>Data: data • Chart ID: <a href="Chart_BarChartID3a357f19fbc6.html">BarChartID3a357f19fbc6</a> • <a href="https://github.com/mages/googleVis">googleVis-0.5.6</a></span><br /> <!-- htmlFooter --> <span> R version 3.1.2 (2014-10-31) • <a href="https://developers.google.com/terms/">Google Terms of Use</a> • <a href="https://google-developers.appspot.com/chart/interactive/docs/gallery/barchart">Documentation and Data Policy</a> </span>
+</div>
+</body>
+</html>
+</div>
+<div class="section level4">
+<h4>單價模型</h4>
+<pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">filter</span>(df, <span class="st">`</span><span class="dt">成交案件類型(CASE_T)</span><span class="st">`</span> ==<span class="st"> &quot;買賣&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">lm</span>(<span class="dt">formula =</span> <span class="st">`</span><span class="dt">交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)</span><span class="st">`</span> ~
+<span class="st">     `</span><span class="dt">單價是否含車位(UPNOTE)</span><span class="st">`</span> +
+<span class="st">     `</span><span class="dt">主要建材(MBUILD)</span><span class="st">`</span> +
+<span class="st">     `</span><span class="dt">行政區(DISTRICT)</span><span class="st">`</span> +
+<span class="st">     `</span><span class="dt">都市土地使用分區(LANDA_Z)</span><span class="st">`</span>)
+<span class="kw">print.xtable</span>(<span class="kw">xtable</span>(m), <span class="dt">type =</span> <span class="st">&quot;html&quot;</span>)</code></pre>
+<!-- html table generated in R 3.1.2 by xtable 1.7-3 package -->
+<!-- Sat May 23 15:06:26 2015 -->
+<TABLE border="1">
+<TR>
+<TH>
+</TH>
+<TH>
+Estimate
+</TH>
+<TH>
+Std. Error
+</TH>
+<TH>
+t value
+</TH>
+<TH>
+Pr(&gt;|t|)
+</TH>
+</TR>
+<TR>
+<TD align="right">
+(Intercept)
+</TD>
+<TD align="right">
+87.4745
+</TD>
+<TD align="right">
+25.0119
+</TD>
+<TD align="right">
+3.50
+</TD>
+<TD align="right">
+0.0005
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>單價是否含車位(UPNOTE)</code>否
+</TD>
+<TD align="right">
+47.5464
+</TD>
+<TD align="right">
+7.9084
+</TD>
+<TD align="right">
+6.01
+</TD>
+<TD align="right">
+0.0000
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>單價是否含車位(UPNOTE)</code>是
+</TD>
+<TD align="right">
+45.5912
+</TD>
+<TD align="right">
+9.1880
+</TD>
+<TD align="right">
+4.96
+</TD>
+<TD align="right">
+0.0000
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>加強磚造
+</TD>
+<TD align="right">
+-48.4023
+</TD>
+<TD align="right">
+13.6192
+</TD>
+<TD align="right">
+-3.55
+</TD>
+<TD align="right">
+0.0004
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>土造
+</TD>
+<TD align="right">
+-60.0245
+</TD>
+<TD align="right">
+50.1604
+</TD>
+<TD align="right">
+-1.20
+</TD>
+<TD align="right">
+0.2319
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>磚造
+</TD>
+<TD align="right">
+-63.9492
+</TD>
+<TD align="right">
+49.8077
+</TD>
+<TD align="right">
+-1.28
+</TD>
+<TD align="right">
+0.1997
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>見使用執照
+</TD>
+<TD align="right">
+-91.3995
+</TD>
+<TD align="right">
+25.5737
+</TD>
+<TD align="right">
+-3.57
+</TD>
+<TD align="right">
+0.0004
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>見其他登記事項
+</TD>
+<TD align="right">
+-19.4890
+</TD>
+<TD align="right">
+16.5027
+</TD>
+<TD align="right">
+-1.18
+</TD>
+<TD align="right">
+0.2381
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>鋼筋混凝土加強磚造
+</TD>
+<TD align="right">
+-69.1000
+</TD>
+<TD align="right">
+50.4284
+</TD>
+<TD align="right">
+-1.37
+</TD>
+<TD align="right">
+0.1711
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>鋼筋混凝土造
+</TD>
+<TD align="right">
+-65.9004
+</TD>
+<TD align="right">
+10.0134
+</TD>
+<TD align="right">
+-6.58
+</TD>
+<TD align="right">
+0.0000
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>鋼骨混凝土造
+</TD>
+<TD align="right">
+-114.4033
+</TD>
+<TD align="right">
+50.7893
+</TD>
+<TD align="right">
+-2.25
+</TD>
+<TD align="right">
+0.0247
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>主要建材(MBUILD)</code>鋼骨鋼筋混凝土造
+</TD>
+<TD align="right">
+-41.0961
+</TD>
+<TD align="right">
+18.3788
+</TD>
+<TD align="right">
+-2.24
+</TD>
+<TD align="right">
+0.0257
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>中正區
+</TD>
+<TD align="right">
+23.8473
+</TD>
+<TD align="right">
+16.5845
+</TD>
+<TD align="right">
+1.44
+</TD>
+<TD align="right">
+0.1510
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>信義區
+</TD>
+<TD align="right">
+14.3256
+</TD>
+<TD align="right">
+8.5672
+</TD>
+<TD align="right">
+1.67
+</TD>
+<TD align="right">
+0.0950
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>內湖區
+</TD>
+<TD align="right">
+-7.3409
+</TD>
+<TD align="right">
+7.9163
+</TD>
+<TD align="right">
+-0.93
+</TD>
+<TD align="right">
+0.3542
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>北投區
+</TD>
+<TD align="right">
+-21.2693
+</TD>
+<TD align="right">
+8.8498
+</TD>
+<TD align="right">
+-2.40
+</TD>
+<TD align="right">
+0.0166
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>南港區
+</TD>
+<TD align="right">
+-12.1258
+</TD>
+<TD align="right">
+11.5022
+</TD>
+<TD align="right">
+-1.05
+</TD>
+<TD align="right">
+0.2922
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>士林區
+</TD>
+<TD align="right">
+-19.6045
+</TD>
+<TD align="right">
+8.6853
+</TD>
+<TD align="right">
+-2.26
+</TD>
+<TD align="right">
+0.0244
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>大同區
+</TD>
+<TD align="right">
+-1.6715
+</TD>
+<TD align="right">
+12.8004
+</TD>
+<TD align="right">
+-0.13
+</TD>
+<TD align="right">
+0.8962
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>大安區
+</TD>
+<TD align="right">
+24.5437
+</TD>
+<TD align="right">
+8.3074
+</TD>
+<TD align="right">
+2.95
+</TD>
+<TD align="right">
+0.0033
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>文山區
+</TD>
+<TD align="right">
+-17.9911
+</TD>
+<TD align="right">
+8.8362
+</TD>
+<TD align="right">
+-2.04
+</TD>
+<TD align="right">
+0.0422
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>松山區
+</TD>
+<TD align="right">
+5.3754
+</TD>
+<TD align="right">
+10.5674
+</TD>
+<TD align="right">
+0.51
+</TD>
+<TD align="right">
+0.6112
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>行政區(DISTRICT)</code>萬華區
+</TD>
+<TD align="right">
+1.0909
+</TD>
+<TD align="right">
+11.6670
+</TD>
+<TD align="right">
+0.09
+</TD>
+<TD align="right">
+0.9255
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>都市土地使用分區(LANDA_Z)</code>住
+</TD>
+<TD align="right">
+-2.9709
+</TD>
+<TD align="right">
+23.5374
+</TD>
+<TD align="right">
+-0.13
+</TD>
+<TD align="right">
+0.8996
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>都市土地使用分區(LANDA_Z)</code>其他
+</TD>
+<TD align="right">
+-22.4221
+</TD>
+<TD align="right">
+24.4643
+</TD>
+<TD align="right">
+-0.92
+</TD>
+<TD align="right">
+0.3598
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>都市土地使用分區(LANDA_Z)</code>商
+</TD>
+<TD align="right">
+-0.9930
+</TD>
+<TD align="right">
+23.8995
+</TD>
+<TD align="right">
+-0.04
+</TD>
+<TD align="right">
+0.9669
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>都市土地使用分區(LANDA_Z)</code>工
+</TD>
+<TD align="right">
+-7.9645
+</TD>
+<TD align="right">
+26.8597
+</TD>
+<TD align="right">
+-0.30
+</TD>
+<TD align="right">
+0.7669
+</TD>
+</TR>
+<TR>
+<TD align="right">
+<code>都市土地使用分區(LANDA_Z)</code>農
+</TD>
+<TD align="right">
+-39.9002
+</TD>
+<TD align="right">
+42.7874
+</TD>
+<TD align="right">
+-0.93
+</TD>
+<TD align="right">
+0.3515
+</TD>
+</TR>
+</TABLE>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
