@@ -29,6 +29,8 @@ suppressPackageStartupMessages({
   library(DataTaipei)
   library(dplyr)
   library(googleVis)
+  library(memisc)
+  library(xtable)
   # for rmarkdown
   op <- options(gvis.plot.tag='chart')
 })
@@ -61,7 +63,7 @@ df <- resourceAquire(rid)
 ```{r df2, dependson="df", warning=FALSE}
 df <- mutate(df, `交易年月(SDATE)`=as.Date(as.character(SDATE + 19110000),"%Y%m%d"))
 colnames(df)[-1] <- strsplit(rs$fieldDescription[4], "、", useBytes = TRUE)[[1]]
-knitr::kable(select(df, 
+knitr::kable(dplyr::select(df, 
                     `成交案件類型(CASE_T)`,
                     `行政區(DISTRICT)`,
                     `都市土地使用分區(LANDA_Z)`,
@@ -83,7 +85,19 @@ group_by(df, `都市土地使用分區(LANDA_Z)`) %>%
 #### 行政區的交易數
 
 ```{r, results='asis'}
-group_by(df, `都市土地使用分區(LANDA_Z)`) %>%
+group_by(df, `行政區(DISTRICT)`) %>%
   summarise(count = length(`_id`)) %>%
   gvisBarChart(yvar = "count")
+```
+
+#### 單價模型
+
+```{r, results='asis'}
+m <- filter(df, `成交案件類型(CASE_T)` == "買賣") %>%
+  lm(formula = `交易單價(萬元/坪)/租賃單價(元/坪)(UPRICE)` ~
+     `單價是否含車位(UPNOTE)` +
+     `主要建材(MBUILD)` +
+     `行政區(DISTRICT)` +
+     `都市土地使用分區(LANDA_Z)`)
+print.xtable(xtable(m), type = "html")
 ```
