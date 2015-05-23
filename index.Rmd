@@ -1,0 +1,102 @@
+---
+title: "R 套件：DataTaipei"
+author: "Wush Wu, John Chen and Will Chang"
+date: "2015年5月23日"
+output: ioslides_presentation
+---
+
+## R 是資料分析最常用的工具之一
+
+<center>![](http://www.kdnuggets.com/images/r-python-other-switch.jpg)</center>
+
+出處：<http://www.kdnuggets.com/2015/05/r-vs-python-meetup-report.html>
+
+## R 有許多資料相關功能跟套件
+
+```{r, echo=FALSE, warning=FALSE}
+library(ggplot2)
+df <- data.frame(
+  date = as.Date(c("2007-04-12", "2009-10-04", "2011-05-12", "2012-08-23", "2013-11-08", "2014-10-29")),
+  pkgs = 1:6 * 1000
+  )
+ggplot(df, aes(x = date, y = pkgs)) +
+  geom_point() +
+  geom_line()
+```
+資料來源：<http://www.r-bloggers.com/milestone-6000-packages-on-cran/>
+
+## 我們聯結R 和DataTaipei
+
+<center><img src="img/dataTaipei_R.png" style="max-height:100%;"/></center>
+
+## 10行內就可搜資料、整理、做應用雛形
+
+```{r echo=TRUE, eval = FALSE, cache=TRUE}
+# 抓資料
+library(DataTaipei)
+rs <- dataSetMetadataSearch(q = "公廁")
+data <- resourceAquire(getResources(rs, 1)$resourceId)
+# 畫圖
+library(ggmap)
+qmap("台北火車站", zoom = 16,legend = "topleft") +
+  geom_point(aes(x = lng, y = lat), colour = "blue", data = data)
+```
+
+## 臺北市公廁分佈
+
+```{r, echo=FALSE, eval = TRUE, warning=FALSE, results='hide', cache=TRUE}
+# 抓資料
+library(DataTaipei)
+rs <- dataSetMetadataSearch(q = "公廁")
+data <- resourceAquire(getResources(rs, 1)$resourceId)
+# 畫圖
+library(ggmap)
+suppressMessages({
+  qmap("台北火車站", zoom = 16,legend = "topleft") +
+    geom_point(aes(x = lng, y = lat), colour = "blue", data = data)
+})
+```
+
+## 再來一個例子
+
+```{r, echo=TRUE, eval = FALSE, warning=FALSE, results='hide'}
+# 抓資料
+library(DataTaipei)
+rs <- dataSetMetadataSearch(q = "youbike")
+data <- resourceAquire(getResources(rs, 1)$resourceId)
+# 整理資料
+library(dplyr)
+data <- dplyr::mutate(data, lat = as.numeric(lat), lng = as.numeric(lng))
+# 畫圖
+library(ggmap)
+qmap("台北火車站", zoom = 15,legend = "topleft") +
+  geom_point(aes(x = lng, y = lat, size = bemp), colour = "blue", data = data)
+```
+
+## 臺北市Youbike站點
+
+```{r, echo=FALSE, eval = TRUE, warning=FALSE, results='hide', cache=TRUE}
+# 抓資料
+suppressPackageStartupMessages({
+  library(DataTaipei)
+  library(dplyr)
+  library(ggmap)
+})
+rs <- dataSetMetadataSearch(q = "youbike")
+data <- resourceAquire(getResources(rs, 1)$resourceId)
+# 整理資料
+data <- dplyr::mutate(data, lat = as.numeric(lat), lng = as.numeric(lng))
+# 畫圖
+suppressMessages({
+  qmap("台北火車站", zoom = 15,legend = "topleft") +
+    geom_point(aes(x = lng, y = lat, size = bemp), colour = "blue", data = data)
+})
+```
+
+## 資料統計
+
+```{r}
+```
+
+## 台北市實價登錄
+
