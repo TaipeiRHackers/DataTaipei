@@ -4,7 +4,7 @@
 \alias{resourceAquire}
 \title{resourceAquire}
 \usage{
-resourceAquire(rid)
+resourceAquire(resourceId)
 }
 \arguments{
 \item{resourceId}{which is one column of query result by using getResources(). Please read seealso to get more information.}

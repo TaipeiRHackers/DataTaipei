@@ -3,8 +3,8 @@
 #'@seealso getResources()
 #'@references 2.3 of \url{http://data.taipei/opendata/developer;jsessionid=4197BA531430955C04015CD2F2CF3699}
 #'@export
-resourceAquire <- function(rid) {
-  response <- dataTaipeiGET(scope = "resourceAquire", resourceId = resourceId, format = "csv")
+resourceAquire <- function(resourceId) {
+  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = "csv")
   dataTaipeiCheck(response)
   resourceParse(response)
   
