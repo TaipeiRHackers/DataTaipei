@@ -1,0 +1,31 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## 氣溫資料
+
+```{r}
+library(DataTaipei)
+library(forecast)
+library(dplyr)
+library(dygraphs)
+library(xts)
+rs <- dataSetMetadataSearch("氣象")
+rs
+resource <- getResources(rs, 2)
+resource
+rid <- resource$resourceId[1]
+df <- resourceAquire(rid)
+df2 <- filter(df, locationName == "臺北市") %>%
+  mutate(startTime = as.POSIXct(strptime(startTime, "%Y-%m-%dT%H:%M:%S+08:00")), 氣溫=parameterName2) %>%
+  select(startTime, 氣溫)
+xts(df2[,-1,with=FALSE], order.by = df2$startTime) %>%
+  dygraph
+```
