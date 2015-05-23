@@ -8,5 +8,5 @@ Maintainer: Wush Wu <wush978@gmail.com>
 Description: R Client for http://data.taipei
 License: GPL (>= 2)
 Imports: XML, RJSONIO, httr, magrittr, data.table
-Suggests: ggmap, dplyr, googleVis, memisc, xtable
+Suggests: ggmap, dplyr, googleVis, memisc, xtable, forecast, dygraphs, xts
 VignetteBuilder: knitr
