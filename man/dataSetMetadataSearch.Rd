@@ -2,19 +2,23 @@
 % Please edit documentation in R/dataSetMetadataSearch.R
 \name{dataSetMetadataSearch}
 \alias{dataSetMetadataSearch}
-\title{Dataset Metadata Search Test
-
-Description of this function}
+\title{dataSetMetadataSearch}
 \usage{
-dataSetMetadataSearch(keyword = NULL, filter = character(0), limit = 100L,
-  offset = 0L)
+dataSetMetadataSearch(q = NULL, limit = 1000, offset = 0)
 }
 \arguments{
-\item{keyword}{(character vector). Filter the result by keyword.}
+\item{q}{(character). Keyword of datasets, what you want to know. Please see the details for more information.}
+
+\item{limit}{(integer). Limit of returned records, if you just need the part of results.
+q has advanced usage.}
 }
 \description{
-Dataset Metadata Search Test
-
-Description of this function
+dataSetMetadataSearch
+}
+\details{
+q has advanced usage, such as q=title:youbike cost:free, which will return the result's title contains "youbike" and cost contains "free". Please see the references for more information.
+}
+\references{
+\url{http://data.taipei/opendata/developer;jsessionid=4197BA531430955C04015CD2F2CF3699}
 }
 

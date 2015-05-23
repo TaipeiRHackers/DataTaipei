@@ -1,3 +1,4 @@
+#'@title dataSetMetadataSearch
 #'@param q (character). Keyword of datasets, what you want to know. Please see the details for more information.
 #'@param limit (integer). Limit of returned records, if you just need the part of results.
 #'q has advanced usage.
