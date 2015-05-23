@@ -3,6 +3,11 @@ R Client for http://data.taipei/
 
 ## 安裝
 
+```r
+library(devtools)
+install_github('TaipeiRHackers/DataTaipei')
+```
+
 ## 範例
 
 ```r
