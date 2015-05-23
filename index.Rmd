@@ -217,7 +217,7 @@ tryCatch({
 
 然後發送e-mail給台北市資訊局
 
-<center>![]("img/kp1.png")</center>
+<center><img src="img/kp1.png" style="max-height:50%;max-width: 50%;"/></center>
 
 ## 我們的專案首頁
 
@@ -229,8 +229,6 @@ tryCatch({
 library(devtools)
 install_github("TaipeiRHackers/DataTaipei")
 ```
-
-## 範例
 
 [DataTaipei應用範例 - 台北市youbike站點資料](http://taipeirhackers.github.io/DataTaipei/youbike.html)
 
