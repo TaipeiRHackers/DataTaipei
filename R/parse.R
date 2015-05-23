@@ -1,7 +1,9 @@
 #'@importFrom magrittr %>%
 #'@importFrom magrittr %<>%
 searchParse <- function(response) {
-  result <- httr::content(response, as = "parsed")$result
+  parsed <- httr::content(response, as = "parsed")
+  if (class(parsed) == "character") parsed <- RJSONIO::fromJSON(parsed)
+  result <- parsed$result
   results <- result$results
   name <- Reduce(union, lapply(results, names))
   name1 <- setdiff(name, "resources")
