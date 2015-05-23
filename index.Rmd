@@ -27,7 +27,7 @@ ggplot(df, aes(x = date, y = pkgs)) +
 
 ## 我們聯結R 和DataTaipei
 
-<center><img src="img/dataTaipei_R.png" style="max-height:100%;"/></center>
+<center><img src="img/dataTaipei_R.png" style="max-height:100%;max-width: 100%;"/></center>
 
 ## 10行內就可搜資料、整理、做應用雛形
 
