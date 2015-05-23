@@ -1,6 +1,6 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "DataTaipei應用範例 - 台北市不動產資料"
+author: "Wush Wu, John Chen and Will Chang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
