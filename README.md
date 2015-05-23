@@ -10,11 +10,8 @@ install_github('TaipeiRHackers/DataTaipei')
 
 ## 範例
 
-```r
-library(DataTaipei)
-tb <- dataSetMetadataSearch(limit = 5)
-tb # Show the search result
-getResources(tb, 1) # Show the resources of the first dataset
-rid <- getResources(tb, 1)$resourceId[1]
-df <- resourceAquire(rid)
-```
+[DataTaipei應用範例 - 台北市youbike站點資料](http://taipeirhackers.github.io/DataTaipei/youbike.html)
+
+[DataTaipei應用範例 - 台北市天氣資料](http://taipeirhackers.github.io/DataTaipei/weather.html)
+
+[DataTaipei應用範例 - 台北市不動產資料](http://taipeirhackers.github.io/DataTaipei/estate.html)
