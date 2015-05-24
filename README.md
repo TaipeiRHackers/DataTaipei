@@ -8,6 +8,14 @@ install.packages('DataTaipei', type = 'source',
   repos = c('http://taipeirhackers.github.io/R', 'http://cran.csie.ntu.edu.tw'))
 ```
 
+## 功能
+
+- 搜尋台北市政府的開放資料
+- 下載台北市政府的開放資料
+    - 下載的資料集會透過http://data.taipei提供的功能轉換為表格
+    - 編碼在windows 上一律轉換為big-5，在非windows上轉換為utf-8
+    - 輸出即為data.table，使用者可以直接從data.table或data.frame出發
+
 ## 範例
 
 [DataTaipei應用範例 - 台北市youbike站點資料](http://taipeirhackers.github.io/DataTaipei/youbike.html)
