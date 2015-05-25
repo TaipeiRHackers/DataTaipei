@@ -41,5 +41,5 @@ resourceParse <- function(response) {
     stopifnot(system(sprintf("iconv -f BIG-5 -t UTF-8 %s > %s", temp, temp2)) == 0)
     temp <- temp2
   }
-  data.table::fread(temp)
+  suppressWarnings(data.table::fread(temp))
 }
