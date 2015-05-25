@@ -11,6 +11,9 @@ dataTaipeiGET <- function(scope=NULL,q=NULL,limit=1000,offset=0,sort=NULL, ...) 
 }
 
 dataTaipeiCheck <- function(response) {
+  if(response$status==500){
+    print("Warning : Taipei City Government Open Data Plateform replys the system can't deliver service temporarily , please wait and do again !")
+  }
   httr::stop_for_status(response)
 }
 
