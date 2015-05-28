@@ -15,9 +15,13 @@ dataTaipeiCheck <- function(response) {
     print("Email the error message to Taipei City Government?")
     input<-readline("Please give your choice: Y or N ")
     if(input=="Y"){
-      account<-readline("Please give your Gmail account name :")
-      pwd<-readline("Please give your Gmail password :")
-      dataTaipeiEmail(account,pwd)
+      if(!require("mailR")){
+        print("Please install package 'mailR' first")
+      }else{
+        account<-readline("Please give your Gmail account name :")
+        pwd<-readline("Please give your Gmail password :")
+        dataTaipeiEmail(account,pwd)
+      }
     }
     stop("Connection to Taipei City Government Open Data Plateform failed, please try again.")
   }
