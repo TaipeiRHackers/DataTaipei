@@ -11,8 +11,16 @@
 #'}
 #'@export
 resourceAquire <- function(resourceId) {
-  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = "csv")
+  print("Which format do you want the resource data be output ?")
+  input<-readline("Please give your choice: 1.csv, 2.xml, 3.json (1/2/3) ")
+  if(input=="1"){
+    format="csv"
+  }else if(input=="2"){
+    format="xml"
+  }else{
+    format="json"
+  }
+  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = format)
   dataTaipeiCheck(response)
   resourceParse(response)
-  
 }
