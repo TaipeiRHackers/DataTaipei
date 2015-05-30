@@ -1,4 +1,4 @@
-dataTaipeiGET <- function(scope=NULL,q=NULL,limit=1000,offset=0,sort=NULL, ...) {
+dataTaipeiGET <- function(scope, q=NULL,limit=1000,offset=0,sort=NULL, ...) {
   url <- "http://data.taipei/opendata/datalist/apiAccess"
   if (!is.null(q)) {
     if (Sys.info()["sysname"] %>% tolower == "windows") {
