@@ -10,8 +10,8 @@
 #'suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
 #'}
 #'@export
-resourceAquire <- function(resourceId) {
-  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = "csv")
+resourceAquire <- function(resourceId, format = c("csv", "json", "xml")) {
+  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = format[1])
   dataTaipeiCheck(response)
   resourceParse(response)
   
