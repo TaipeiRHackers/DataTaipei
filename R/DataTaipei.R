@@ -1,4 +1,4 @@
-dataTaipeiGET <- function(scope=NULL,q=NULL,limit=1000,offset=0,sort=NULL, ...) {
+dataTaipeiGET <- function(scope, q=NULL,limit=1000,offset=0,sort=NULL, ...) {
   url <- "http://data.taipei/opendata/datalist/apiAccess"
   if (!is.null(q)) {
     if (Sys.info()["sysname"] %>% tolower == "windows") {
@@ -10,31 +10,14 @@ dataTaipeiGET <- function(scope=NULL,q=NULL,limit=1000,offset=0,sort=NULL, ...) 
   response
 }
 
-dataTaipeiCheck <- function(response) {
+dataTaipeiCheck <- function(response, url) {
+  browser()
   if(response$status==500){
-    print("Email the error message to Taipei City Government?")
-    input<-readline("Please give your choice: Y or N ")
-    if(input=="Y"){
-      if(!require("mailR")){
-        print("Please install package 'mailR' first")
-      }else{
-        account<-readline("Please give your Gmail account name :")
-        pwd<-readline("Please give your Gmail password :")
-        dataTaipeiEmail(account,pwd)
-      }
-    }
-    stop("Connection to Taipei City Government Open Data Plateform failed, please try again.")
+    stop(sprintf("
+Taipei City Government Open Data Plateform replys the system can't deliver service temporarily.
+Please contact services@mail.taipei.gov.tw if you need further support.
+The accessed url is: %s
+", response$url))
   }
+  httr::stop_for_status(response)
 }
-
-dataTaipeiEmail <- function(account=NULL,pwd=NULL){
-  mailR::send.mail(from = paste0(account,"@gmail.com"),
-            to = "taipeirhacker@gmail.com", # change to services@mail.taipei.gov.tw when confirmed
-            subject = "Taipei Open Data API Connection failed",
-            body = "Dear Sir, there is a problem for your reference that Taipei City Open Data API (resourceAquire) didn't work. ",
-            smtp = list(host.name = "smtp.gmail.com", port = 465, user.name = account, passwd = pwd , ssl = TRUE),
-            authenticate = TRUE,
-            send = TRUE)
-  print("the email has sent !")
-}
-
