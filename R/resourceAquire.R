@@ -11,8 +11,7 @@
 #'}
 #'@export
 resourceAquire <- function(resourceId, format = c("csv", "json", "xml")) {
-  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = format[1])
+  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = format[1], limit = NULL)
   dataTaipeiCheck(response)
   resourceParse(response)
-  
 }
