@@ -1,5 +1,6 @@
 #'@title Download the Resource from \url{http://data.taipei}
 #'@param resourceId (character). The id of the resource.
+#'@param format (character). the format for downloading the resource content.
 #'@seealso \code{\link{getResources}}
 #'@references \url{http://tpeodck.gitbooks.io/data-taipei-developer-guide/content/chapter2section3.html}
 #'@return A data.frame. The downloaded table of the resource.
@@ -7,20 +8,11 @@
 #'\dontrun{
 #'rs <- dataSetMetadataSearch(q = "youbike")
 #'rid <- getResources(rs, 1)
-#'suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
+#'suppressWarnings(df <- resourceAquire(rid$resourceId[1],"xml")
 #'}
 #'@export
-resourceAquire <- function(resourceId) {
-  print("Which format do you want the resource data be output ?")
-  input<-readline("Please give your choice: 1.csv, 2.xml, 3.json (1/2/3) ")
-  if(input=="1"){
-    format="csv"
-  }else if(input=="2"){
-    format="xml"
-  }else{
-    format="json"
-  }
-  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = format)
+resourceAquire <- function(resourceId, format = c("csv", "json", "xml")) {
+  response <- dataTaipeiGET(scope = "resourceAquire", rid = resourceId, format = format[1])
   dataTaipeiCheck(response)
   resourceParse(response)
 }
