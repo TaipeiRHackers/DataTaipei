@@ -4,10 +4,12 @@
 \alias{resourceAquire}
 \title{Download the Resource from \url{http://data.taipei}}
 \usage{
-resourceAquire(resourceId)
+resourceAquire(resourceId, format = c("csv", "json", "xml"))
 }
 \arguments{
 \item{resourceId}{(character). The id of the resource.}
+
+\item{format}{(character). the format for downloading the resource content.}
 }
 \value{
 A data.frame. The downloaded table of the resource.
@@ -19,7 +21,7 @@ Download the Resource from \url{http://data.taipei}
 \dontrun{
 rs <- dataSetMetadataSearch(q = "youbike")
 rid <- getResources(rs, 1)
-suppressWarnings(df <- resourceAquire(rid$resourceId[1]))
+suppressWarnings(df <- resourceAquire(rid$resourceId[1],"xml")
 }
 }
 \references{
