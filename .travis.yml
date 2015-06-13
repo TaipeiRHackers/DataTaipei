@@ -6,6 +6,9 @@ r_github_packages:
   - jimhester/robustr
   - jimhester/covr
 
+before_script:
+  - Rscript -e "stringi::stri_install_check()"
+
 after_success:
   - Rscript -e 'library(covr); coveralls()'
 
