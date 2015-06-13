@@ -7,7 +7,7 @@ r_github_packages:
   - jimhester/covr
 
 before_script:
-  - Rscript -e "stringi::stri_install_check()"
+  - Rscript -e "stringi::stri_install_icudt()"
 
 after_success:
   - Rscript -e 'library(covr); coveralls()'
