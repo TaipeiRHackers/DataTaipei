@@ -18,6 +18,7 @@ before_install:
   - curl -OL http://raw.github.com/wush978/r-travis-mac/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
+  - ./travis-tool.sh install_deps
   - Rscript -e "install.packages('stringi')"
   - Rscript -e "library(stringi);stri_install_icudt()"
 
