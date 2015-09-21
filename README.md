@@ -1,6 +1,11 @@
 # DataTaipei
 R Client for http://data.taipei/
 
+Linux: [![Travis-ci Status](https://travis-ci.org/TaipeiRHackers/DataTaipei.svg?branch=master)](https://travis-ci.org/TaipeiRHackers/DataTaipei)
+Win : [![Build status](https://ci.appveyor.com/api/projects/status/luwh8nnqbu526ejd/branch/master?svg=true)](https://ci.appveyor.com/project/wush978/datataipei/branch/master)
+OS X: [![Travis-ci Status](https://travis-ci.org/TaipeiRHackers/DataTaipei.svg?branch=osx)](https://travis-ci.org/TaipeiRHackers/DataTaipei)
+
+
 ## 安裝
 
 
