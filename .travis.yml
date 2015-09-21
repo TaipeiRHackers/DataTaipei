@@ -1,22 +1,33 @@
-language: r
+language: xcode61
 
 sudo: required
 
-r_packages:
-  - stringi
+language: objective-c
 
-r_github_packages:
-  - jimhester/robustr
-  - jimhester/covr
+addons:
+  apt_packages:
+    - pandoc
 
-before_script:
+script: ./travis-tool.sh run_tests
+
+after_failure:
+  - ./travis-tool.sh dump_logs
+
+before_install:
+  - echo "options(repos = c(CRAN='http://cran.r-project.org'))" >> ~/.Rprofile
+  - curl -OL http://raw.github.com/wush978/r-travis-mac/master/scripts/travis-tool.sh
+  - chmod 755 ./travis-tool.sh
+  - ./travis-tool.sh bootstrap
   - Rscript -e "library(stringi);stri_install_icudt()"
-
-after_success:
-  - Rscript -e 'library(covr); coveralls()'
 
 notifications:
   email:
     on_success: change
     on_failure: change
+
+env:
+  global:
+    - R_BUILD_ARGS="--no-manual"
+    - R_CHECK_ARGS="--no-manual --as-cran --no-vignettes"
+    - PKG_CFLAGS="-g -O3 -Wall -pedantic -I../inst/include -DLOGGER_LEVEL=LL_WARN"
 
