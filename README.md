@@ -3,17 +3,10 @@ R Client for http://data.taipei/
 
 ## 安裝
 
-首先請安裝相依的套件：
 
 ```r
-install.packages(c('httr','XML','RJSONIO','plyr','Rcpp','chron','reshape2','data.table'))
-```
-
-接下來，可以透過github套件庫安裝套件：
-
-```r
-install.packages('DataTaipei', type = 'source',
-  repos = c('http://taipeirhackers.github.io/R', 'http://cran.csie.ntu.edu.tw'))
+library(devtools)
+install_github("TaipeiRHackers/DataTaipei")
 ```
 
 ## 功能
