@@ -3,10 +3,6 @@ title: "DataTaipei應用範例 - 台北市youbike站點資料"
 author: "Wush Wu, John Chen and Will Chang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ### YouBike臺北市公共自行車站場地圖
