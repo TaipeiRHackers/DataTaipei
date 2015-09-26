@@ -11,7 +11,6 @@ dataTaipeiGET <- function(scope, q=NULL,limit=1000,offset=0,sort=NULL, ...) {
 }
 
 dataTaipeiCheck <- function(response, url) {
-  browser()
   if(response$status==500){
     stop(sprintf("
 Taipei City Government Open Data Plateform replys the system can't deliver service temporarily.
